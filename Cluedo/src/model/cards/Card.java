@@ -1,4 +1,4 @@
-package model;
+package model.cards;
 
 /**
  * An abstract class for representing the card objects held by players,

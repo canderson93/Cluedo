@@ -1,4 +1,4 @@
-package model;
+package model.cards;
 
 /**
  * Cards representing the different characters in the game
