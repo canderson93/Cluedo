@@ -1,10 +1,12 @@
 package model.tiles;
 
-import controller.Player;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Room extends Tile {
 	//The name of the room, and the letter to represent it on the board
 	private final String name;
+	private List<Door> entrances = new ArrayList<Door>();
 	
 	public Room(String name, char key){
 		super(key);
@@ -15,17 +17,8 @@ public class Room extends Tile {
 		this(name, name.charAt(0));
 	}
 	
-
-	@Override
-	public boolean canBeReached(Tile tile, int roll) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void acceptMove(Player player, Tile tile, int roll) {
-		// TODO Auto-generated method stub
-		
+	public void addEntrance(Door door){
+		entrances.add(door);
 	}
 	
 	/**

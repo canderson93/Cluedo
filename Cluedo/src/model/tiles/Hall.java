@@ -19,19 +19,6 @@ public class Hall extends Tile{
 		this.y = y;
 	}
 	
-
-	@Override
-	public boolean canBeReached(Tile tile, int roll) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void acceptMove(Player player, Tile tile, int roll) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	@Override
 	public char key(){
 		//If this tile contains a player, show the player instead

@@ -1,5 +1,7 @@
 package model.cards;
 
+import model.tiles.Room;
+
 /**
  * Cards representing the different weapons in the game
  * 
@@ -9,8 +11,10 @@ package model.cards;
  *
  */
 public class RoomCard extends Card {	
+	private Room room; //the related room object
 	
-	public RoomCard(String name){
-		super(name);
+	public RoomCard(Room room){
+		super(room.name());
+		this.room = room;
 	}
 }

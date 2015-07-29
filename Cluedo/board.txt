@@ -1,0 +1,36 @@
+K:Kitchen;
+C:Conservatory;
+F:Library;
+G:Lounge;
+H:Hall;
+I:Study;
+B:Ball Room;
+E:Billiard Room;
+D:Dining Room;
+26;26;
+##########?####?##########
+#KKKKKK#___BBBB___#CCCCCC#
+#KKKKKK__BBBBBBBB__CCCCCC#
+#KKKKKK__BBBBBBBB__CCCCCC#
+#KKKKKK__BBBBBBBB__dCCCCC#
+#KKKKKK__lBBBBBBr___CCCC##
+##KKKdK__BBBBBBBB_______?#
+#________BdBBBBdB_______##
+##_________________EEEEEE#
+#DDDDD_____________lEEEEE#
+#DDDDDDDD__#####___EEEEEE#
+#DDDDDDDr__#####___EEEEEE#
+#DDDDDDDD__#####___EEEEEE#
+#DDDDDDDD__#####________##
+#DDDDDDDD__#####___FFuFF##
+#DDDDDDdD__#####__FFFFFFF#
+##_________#####__lFFFFFF#
+#?________________FFFFFFF#
+##________HHuuHH___FFFFF##
+#GGGGGGu__HHHHHH________?#
+#GGGGGGG__HHHHHr________##
+#GGGGGGG__HHHHHH__uIIIIII#
+#GGGGGGG__HHHHHH__IIIIIII#
+#GGGGGGG__HHHHHH__IIIIIII#
+#GGGGGG#?##HHHH##_#IIIIII#
+##########################
