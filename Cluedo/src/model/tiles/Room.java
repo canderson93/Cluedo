@@ -25,5 +25,5 @@ public class Room extends Tile {
 	 * The name of the room
 	 * @return
 	 */
-	public String name(){return name;}
+	public String getName(){return name;}
 }
