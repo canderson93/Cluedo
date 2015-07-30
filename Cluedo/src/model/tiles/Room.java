@@ -31,8 +31,6 @@ public class Room extends Tile {
 	 * @return
 	 */
 	public String getName(){return name;}
-<<<<<<< HEAD
-=======
 	
 	@Override
 	public char getKey(){return this.key;}
@@ -54,6 +52,4 @@ public class Room extends Tile {
 	
 	@Override
 	public int getY(){throw new RuntimeException("Cannot get y position of a Room");}
-	
->>>>>>> origin/master
 }

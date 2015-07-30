@@ -6,6 +6,7 @@ import model.tiles.Door;
 import model.tiles.Hall;
 import model.tiles.Room;
 import model.tiles.Tile;
+import model.tiles.Warp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,8 +69,18 @@ public class Board {
 		}
 	}
 	
-	public boolean move(Player player, Direction direction, int roll){
+	public boolean move(Player player, Direction direction){
+		//Get the target tiles
 		Tile fromTile = player.getTile();
+		Tile toTile = getTile(fromTile, direction);
+		
+		//check the move direction is valid
+		if (!fromTile.canMoveTo(toTile)){return false;}
+		
+		//Try set the new tile to the player
+		if (!toTile.setPlayer(player)){return false;}
+		fromTile.removePlayer(player);
+		
 		return false;
 	}
 	
@@ -95,6 +106,8 @@ public class Board {
 			return x > 0 ? board[x-1][y] : null;
 		case RIGHT:
 			return x > 0 ? board[x+1][y] : null;
+		case WARP:
+			return null; //TODO: Make this return the corresponding room
 		}
 		return null;
 	}
@@ -141,6 +154,9 @@ public class Board {
 	private Tile[][] parseTokens(Scanner sc, Map<Character, Room> rooms, int width, int height) {
 		Tile[][] board = new Tile[width][height];
 		String line;
+		
+		//Maps the tiles to the warps
+		Map<Character, Warp> warps = new HashMap<Character, Warp>();
 		
 		//Parse the board tokens
 		for (int i = 0; i < width; i++){
@@ -196,7 +212,7 @@ public class Board {
 				//Link doors to their rooms
 				if (tile instanceof Door){
 					Door door = (Door)tile;
-					Tile r;
+					Tile r = null;
 					
 					try{
 						switch(door.getDirection()){
@@ -209,8 +225,24 @@ public class Board {
 						case LEFT:
 							r = board[i-1][j];
 							break;
-						default:
+						case RIGHT:
 							r = board[i+1][j];
+							break;
+						case WARP:
+							//Check the surrounding tiles for a room tile that isn't
+							//the blank room
+							for (Direction d : Direction.values()){
+								if (d != Direction.WARP){
+									r = this.getTile(door, d);
+									
+									if (r instanceof Room && ((Room)r).getKey() != '#'){
+										break;
+									}
+								} else {
+									continue;
+								}
+								throw new RuntimeException("Warp tile was not connected to a room");
+							}
 						}
 					} catch (IndexOutOfBoundsException e){
 						throw new RuntimeException("Could not parse: Door at "+i+" "+j+" points off the board");
@@ -233,7 +265,6 @@ public class Board {
 	 */
 	private Map<Character, Room> parseRooms(Scanner sc) {
 		Pattern roomReg = Pattern.compile("[A-Z]:.+");
-		
 		
 		//This is a special case room key for squares the player can't go
 		rooms.put('#', new Room("Blank", '#'));

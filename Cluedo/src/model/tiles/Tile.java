@@ -63,6 +63,12 @@ public abstract class Tile {
 		return true;
 	}
 	
+	public void removePlayer(Player p){
+		if (this.player == p){
+			this.player = null;
+		}
+	}
+	
 	//getters and setters
 	public int getX(){return x;}
 	public int getY(){return y;}

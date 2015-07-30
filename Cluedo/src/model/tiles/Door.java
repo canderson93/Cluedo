@@ -3,17 +3,23 @@ package model.tiles;
 import model.Board.Direction;
 
 public class Door extends Tile {
-	private final Direction dir;
-	private Room room;
+	protected final Direction dir;
+	protected Room room;
 	
 	public Door(Direction dir, int x, int y){
-		super('d', x, y);
+		this('d', dir, x, y);
+	}
+	
+	public Door(char key, Direction dir, int x, int y){
+		super(key, x, y);
 		this.dir = dir;
 	}
 	
 	//Getters and setters
 	public void setRoom(Room room){this.room = room;}
+	
 	public Direction getDirection(){return dir;}
+	public Room getRoom(){return room;}
 
 	@Override
 	public boolean canMoveTo(Tile tile) {

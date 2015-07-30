@@ -7,13 +7,15 @@ I:Study;
 B:Ball Room;
 E:Billiard Room;
 D:Dining Room;
+1-KI;
+2-CG;
 26;26;
 ##########?####?##########
-#KKKKKK#___BBBB___#CCCCCC#
+#KKKKK1#___BBBB___#CCCCCC#
 #KKKKKK__BBBBBBBB__CCCCCC#
 #KKKKKK__BBBBBBBB__CCCCCC#
 #KKKKKK__BBBBBBBB__dCCCCC#
-#KKKKKK__lBBBBBBr___CCCC##
+#KKKKKK__lBBBBBBr___CCC2##
 ##KKKdK__BBBBBBBB_______?#
 #________BdBBBBdB_______##
 ##_________________EEEEEE#
@@ -27,9 +29,9 @@ D:Dining Room;
 ##_________#####__lFFFFFF#
 #?________________FFFFFFF#
 ##________HHuuHH___FFFFF##
-#GGGGGGu__HHHHHH________?#
+#2GGGGGu__HHHHHH________?#
 #GGGGGGG__HHHHHr________##
-#GGGGGGG__HHHHHH__uIIIIII#
+#GGGGGGG__HHHHHH__uIIIII1#
 #GGGGGGG__HHHHHH__IIIIIII#
 #GGGGGGG__HHHHHH__IIIIIII#
 #GGGGGG#?##HHHH##_#IIIIII#

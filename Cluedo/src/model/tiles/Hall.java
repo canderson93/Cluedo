@@ -13,7 +13,9 @@ public class Hall extends Tile{
 
 	@Override
 	public boolean canMoveTo(Tile tile) {
-		//Check the tile is exactly 1 tile away
-		return !(tile instanceof Room) && (Math.abs(this.x-tile.x) + Math.abs(this.y-tile.y) == 1);
+		//Check the room is one the hall is allowed to move to
+		if (tile instanceof Room || tile instanceof Warp){return false;}
+		
+		return Math.abs(this.x-tile.x) + Math.abs(this.y-tile.y) == 1;
 	}
 }
