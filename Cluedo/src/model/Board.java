@@ -9,6 +9,7 @@ import model.tiles.Tile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
  *
  */
 public class Board {
+	private Map<Character, Room> rooms = new HashMap<Character, Room>();
 	private Set<Hall> spawns = new HashSet<Hall>();
 	private Tile[][] board;
 	
@@ -67,7 +69,34 @@ public class Board {
 	}
 	
 	public boolean move(Player player, Direction direction, int roll){
+		Tile fromTile = player.getTile();
 		return false;
+	}
+	
+	/**
+	 * Gets the tile in the direction of the provided tile
+	 * @param tile
+	 * @param dir
+	 * @return
+	 */
+	private Tile getTile(Tile tile, Direction dir){
+		//TODO: Handle when the player is standing in a room
+		if (tile instanceof Room){return tile;}
+		
+		int x = tile.getX();
+		int y = tile.getY();
+		
+		switch (dir){
+		case UP:
+			return y < board.length-1 ? board[x][y+1] : null;
+		case DOWN:
+			return y > 0 ? board[x][y-1] : null;
+		case LEFT:
+			return x > 0 ? board[x-1][y] : null;
+		case RIGHT:
+			return x > 0 ? board[x+1][y] : null;
+		}
+		return null;
 	}
 	
 	/**
@@ -204,7 +233,7 @@ public class Board {
 	 */
 	private Map<Character, Room> parseRooms(Scanner sc) {
 		Pattern roomReg = Pattern.compile("[A-Z]:.+");
-		Map<Character, Room> rooms = new HashMap<Character, Room>();
+		
 		
 		//This is a special case room key for squares the player can't go
 		rooms.put('#', new Room("Blank", '#'));
@@ -225,4 +254,7 @@ public class Board {
 		
 		return rooms;
 	}
+	
+	//Getters and setters
+	public Collection<Room> getRooms(){return rooms.values();}
 }

@@ -30,7 +30,7 @@ public abstract class Tile {
 	public char getKey(){
 		//If this tile contains a player, show the player instead
 		if (player != null){
-			return player.key();
+			return player.getKey();
 		}
 				
 		return this.key;
