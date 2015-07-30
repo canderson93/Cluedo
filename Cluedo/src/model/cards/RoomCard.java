@@ -14,7 +14,7 @@ public class RoomCard extends Card {
 	private Room room; //the related room object
 	
 	public RoomCard(Room room){
-		super(room.name());
+		super(room.getName());
 		this.room = room;
 	}
 }
