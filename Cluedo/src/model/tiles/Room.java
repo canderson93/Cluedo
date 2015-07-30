@@ -9,7 +9,7 @@ public class Room extends Tile {
 	private List<Door> entrances = new ArrayList<Door>();
 	
 	public Room(String name, char key){
-		super(key);
+		super(key, -1, -1); //don't have x and y positions for this
 		this.name = name;
 	}
 	
@@ -19,6 +19,11 @@ public class Room extends Tile {
 	
 	public void addEntrance(Door door){
 		entrances.add(door);
+		door.setRoom(this);
+	}
+	
+	public boolean containsEntrance(Door door){
+		return entrances.contains(door);
 	}
 	
 	/**
@@ -26,4 +31,29 @@ public class Room extends Tile {
 	 * @return
 	 */
 	public String getName(){return name;}
+<<<<<<< HEAD
+=======
+	
+	@Override
+	public char getKey(){return this.key;}
+
+	@Override
+	public boolean canMoveTo(Tile tile) {
+		//Check to see if any of our entrances can reach the tile
+		for (Door d : entrances){
+			if (d.canMoveTo(tile)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int getX(){throw new RuntimeException("Cannot get x position of a Room");}
+	
+	@Override
+	public int getY(){throw new RuntimeException("Cannot get y position of a Room");}
+	
+>>>>>>> origin/master
 }
