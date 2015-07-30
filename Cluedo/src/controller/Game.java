@@ -40,15 +40,6 @@ public class Game {
 		for(Characters c: Characters.values()){
 			characters.add(new CharacterCard(c.name()));
 		}
-		
-		
-		
-		
-	}
-	
-	
-	
-	
-	
+	}	
 }
 	
