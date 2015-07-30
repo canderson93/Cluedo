@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -287,5 +288,8 @@ public class Board {
 	}
 	
 	//Getters and setters
-	public Collection<Room> getRooms(){return rooms.values();}
+	public List<Room> getRooms(){
+		List<Room> roomsList = (List<Room>) rooms.values();
+		return roomsList;
+	}
 }

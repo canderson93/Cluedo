@@ -24,13 +24,11 @@ public class Player {
 		this.name = name;
 		this.key = key;
 		cards = new ArrayList<Card>();
-		
 	}
 	
 	
 	public String getName(){return name;}
 	public char getKey(){return key;}
 	public Tile getTile(){return tile;}
-	
 	public void setTile(Tile t){this.tile = t;}
 }
