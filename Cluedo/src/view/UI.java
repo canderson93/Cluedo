@@ -62,6 +62,12 @@ public class UI{
 			case "help": //Help command
 				showHelp();
 				continue;
+			case "key":
+				printKey();
+				continue;
+			case "q":
+			case "quit":
+				break; //Leave the loop
 			default:
 				System.out.println(in + "?... That sounds like something the killer would say.");
 				continue;
@@ -69,6 +75,8 @@ public class UI{
 			
 			redraw();
 		}
+		
+		sc.close();
 	}
 	
 	/**
@@ -95,6 +103,10 @@ public class UI{
 	 * Handles a player suggestion
 	 */
 	public void doSuggestion(){
+		
+	}
+	
+	public void printKey(){
 		
 	}
 	

@@ -1,11 +1,11 @@
 K:Kitchen;
 C:Conservatory;
-F:Library;
+L:Library;
 G:Lounge;
 H:Hall;
-I:Study;
+S:Study;
 B:Ball Room;
-E:Billiard Room;
+I:Billiard Room;
 D:Dining Room;
 26;26;
 ##########?####?##########
@@ -16,21 +16,21 @@ D:Dining Room;
 #KKKKKK__lBBBBBBr___CCC2##
 ##KKKdK__BBBBBBBB_______?#
 #________BdBBBBdB_______##
-##_________________EEEEEE#
-#DDDDD_____________lEEEEE#
-#DDDDDDDD__#####___EEEEEE#
-#DDDDDDDr__#####___EEEEEE#
-#DDDDDDDD__#####___EEEEEE#
+##_________________IIIIII#
+#DDDDD_____________lIIIII#
+#DDDDDDDD__#####___IIIIII#
+#DDDDDDDr__#####___IIIIII#
+#DDDDDDDD__#####___IIIIII#
 #DDDDDDDD__#####________##
-#DDDDDDDD__#####___FFuFF##
-#DDDDDDdD__#####__FFFFFFF#
-##_________#####__lFFFFFF#
-#?________________FFFFFFF#
-##________HHuuHH___FFFFF##
+#DDDDDDDD__#####___LLuLL##
+#DDDDDDdD__#####__LLLLLLL#
+##_________#####__lLLLLLL#
+#?________________LLLLLLL#
+##________HHuuHH___LLLLL##
 #2GGGGGu__HHHHHH________?#
 #GGGGGGG__HHHHHr________##
-#GGGGGGG__HHHHHH__uIIIII1#
-#GGGGGGG__HHHHHH__IIIIIII#
-#GGGGGGG__HHHHHH__IIIIIII#
-#GGGGGG#?##HHHH##_#IIIIII#
+#GGGGGGG__HHHHHH__uSSSSS1#
+#GGGGGGG__HHHHHH__SSSSSSS#
+#GGGGGGG__HHHHHH__SSSSSSS#
+#GGGGGG#?##HHHH##_#SSSSSS#
 ##########################
