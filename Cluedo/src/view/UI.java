@@ -26,6 +26,7 @@ public class UI{
 		redraw();
 		
 		//main game loop
+		gameLoop:
 		while (true){
 			String in = sc.next();
 			
@@ -67,7 +68,7 @@ public class UI{
 				continue;
 			case "q":
 			case "quit":
-				break; //Leave the loop
+				break gameLoop; //Leave the loop
 			default:
 				System.out.println(in + "?... That sounds like something the killer would say.");
 				continue;
