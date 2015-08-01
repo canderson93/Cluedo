@@ -10,9 +10,10 @@ import model.tiles.Room;
 import model.Weapons;
 import model.Rooms;
 import model.Characters;
+import model.Board.Direction;
 /**
  * The main class for controlling game logic
- *
+ * @author Chloe
  */
 public class Game {
 	private Board board;
@@ -20,6 +21,9 @@ public class Game {
 	List<Card> solution;
 	List<Card> restOfDeck;
 	List<Player> players;
+	int roll;
+	int rollCount;
+	Player current;
 	
 	
 	public Game(String filename, int numPlayers){
@@ -30,6 +34,8 @@ public class Game {
 		this.players = new ArrayList<Player>();
 		loadCards();
 		createPlayers(numPlayers);
+		this.current = this.players.get(0);
+		//run();
 	}
 	
 	/**
@@ -50,15 +56,14 @@ public class Game {
 		List<Room> roomObj = new ArrayList<Room>();
 		roomObj = board.getRooms();
 		for(Room r: roomObj){
-			rooms.add(new RoomCard(r));
-		}	
+			if(r.getName() != "Blank"){ rooms.add(new RoomCard(r)); }
+		}
 		createSolution(characters);
 		createSolution(weapons);
 		createSolution(rooms);
 		restOfDeck.addAll(characters);
 		restOfDeck.addAll(weapons);
-		restOfDeck.addAll(rooms);
-		
+		restOfDeck.addAll(rooms);		
 	}
 	
 	/**
@@ -67,11 +72,9 @@ public class Game {
 	 */
 	private void createSolution(List<Card> cards) {	
 		Card randomItem = cards.get(new Random().nextInt(cards.size()));
-		System.out.println(randomItem.getValue());
-		this.solution.add(randomItem);	
+		this.solution.add(randomItem);
 	}	
 	
-
 	private void createPlayers(int numPlayers) {
 		
 		List<Card> dealingPlayers = new ArrayList<Card>();
@@ -84,5 +87,40 @@ public class Game {
 			players.add(new Player(temp,temp.charAt(0)));
 		}
 	}
-}
 	
+	
+	private void nextRound(){
+		
+		this.roll = new Random().nextInt(6);
+		this.rollCount = roll;
+		this.current = this.players.get((players.indexOf(current) + 1) % players.size());
+		//System.out.println("current player = " + this.current.getName());
+		
+	}
+	
+	private String move(Direction d){
+		
+		if(this.rollCount == 0){ return "You have no more rolls"; }
+		if(!this.board.move(this.current, d)){
+			return "Can't go dat way";
+		}
+		this.rollCount--;
+		return null;
+	}
+	
+	/**
+	 * Getters for game logic
+	 *	
+	 */
+	
+	public Board getBoard(){ return this.board; }
+	
+	public List<Player> getPlayers(){ return this.players; }
+	
+	public int getRoll(){ return this.roll; }
+	
+	public Player getCurrent(){ return this.current; }
+	
+	public boolean isFinished(){ return this.gameComplete; }
+	
+}
