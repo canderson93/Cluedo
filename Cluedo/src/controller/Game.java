@@ -88,8 +88,7 @@ public class Game {
 		}
 	}
 	
-	
-	private void nextRound(){
+	public void nextRound(){
 		
 		this.roll = new Random().nextInt(6);
 		this.rollCount = roll;
@@ -98,14 +97,14 @@ public class Game {
 		
 	}
 	
-	private String move(Direction d){
+	public String move(Direction d){
 		
 		if(this.rollCount == 0){ return "You have no more rolls"; }
 		if(!this.board.move(this.current, d)){
 			return "Can't go dat way";
 		}
 		this.rollCount--;
-		return null;
+		return "";
 	}
 	
 	/**

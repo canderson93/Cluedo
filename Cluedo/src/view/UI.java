@@ -2,6 +2,7 @@ package view;
 
 import java.util.Scanner;
 
+import model.Board.Direction;
 import controller.Game;
 
 /**
@@ -20,6 +21,10 @@ public class UI{
 	public void startGame(){
 		Scanner sc = new Scanner(System.in);
 		
+		//Start the game
+		game.nextRound();
+		redraw();
+		
 		//main game loop
 		while (true){
 			String in = sc.next();
@@ -27,23 +32,23 @@ public class UI{
 			switch(in){
 			case "u": //Up command
 			case "up":
-				System.out.println("going up");
+				System.out.println(game.move(Direction.UP));
 				continue;
 			case "d": //Down command
 			case "down":
-				System.out.println("going down");
+				System.out.println(game.move(Direction.DOWN));
 				continue;
 			case "l": //Left Command
 			case "left":
-				System.out.println("going left");
+				System.out.println(game.move(Direction.LEFT));
 				continue;
 			case "r": //Right command
 			case "right":
-				System.out.println("going right");
+				System.out.println(game.move(Direction.RIGHT));
 				continue;
 			case "s": //Shortcut command
 			case "shortcut":
-				System.out.println("Sneeeeeaky ;)");
+				System.out.println(game.move(Direction.WARP));
 				continue;
 			case "accuse": //Accusation command
 				System.out.println("IT WAS YOU!!!!");
@@ -96,7 +101,7 @@ public class UI{
 	 * Redraws the board view, and present special options
 	 */
 	public void redraw(){
-		
+		System.out.println(game.getBoard().toString());
 	}
 	
 	/**
