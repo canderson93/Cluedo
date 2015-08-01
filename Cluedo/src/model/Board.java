@@ -70,7 +70,7 @@ public class Board {
 	}
 	
 	/**
-	 * 3s the player in the given direction
+	 * moves the player in the given direction
 	 * 
 	 * @param player The player to be moved
 	 * @param direction The direction to move
@@ -87,7 +87,11 @@ public class Board {
 		
 		//Try set the new tile to the player
 		if (!toTile.setPlayer(player)){return false;}
+		
+		//If everythings okay, remove the player the old tile,
+		//and update it's tile
 		fromTile.removePlayer(player);
+		player.setTile(toTile);
 		
 		return true;
 	}
@@ -160,7 +164,7 @@ public class Board {
 		int width;
 		int height;
 		
-		sc.useDelimiter("[;\n]+");
+		sc.useDelimiter("[;\r\n]+");
 		
 		Map<Character, Room> rooms = parseRooms(sc);
 		Pattern intRegex = Pattern.compile("[0-9]+");	
