@@ -32,6 +32,9 @@ public class Room extends Tile {
 	 */
 	public String getName(){return name;}
 	
+	//Returns a copy of the rooms entrances
+	public List<Door> getEntrances(){return new ArrayList<Door>(entrances);}
+	
 	@Override
 	public char getKey(){return this.key;}
 

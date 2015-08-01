@@ -70,34 +70,56 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Moves the player in the given direction
+	 * 
+	 * @param player The player to be moved
+	 * @param direction The direction to move
+	 * @return whether the move was successful
+	 */
 	public boolean move(Player player, Direction direction){
 		//Get the target tiles
 		Tile fromTile = player.getTile();
 		Tile toTile = getTile(fromTile, direction);
 		
 		//check the move direction is valid
+		if (toTile == null){return false;}
 		if (!fromTile.canMoveTo(toTile)){return false;}
 		
 		//Try set the new tile to the player
 		if (!toTile.setPlayer(player)){return false;}
 		fromTile.removePlayer(player);
 		
-		return false;
+		return true;
 	}
 	
 	/**
-	 * Gets the tile in the direction of the provided tile
-	 * @param tile
-	 * @param dir
-	 * @return
+	 * Gets the tile in the direction of the provided tile, or null
+	 * if there is no eligible tile in that direction.
+	 * 
+	 * @param tile the tile to move from
+	 * @param dir the direction to move
+	 * @return the tile in the given direction, or null if there is none
 	 */
 	private Tile getTile(Tile tile, Direction dir){
-		//TODO: Handle when the player is standing in a room
-		if (tile instanceof Room){return tile;}
+		//TODO: Fix when two doors are facing the same direction in a room (eg the Ball Room)
+		if (tile instanceof Room){
+			//Check whether any of the doors can move in that direction
+			for (Tile t : ((Room)tile).getEntrances()){
+				Tile target = getTile(t, dir);
+				if (target != null){return target;}
+			}
+			
+			return null;
+		}
+		
+		//Check whether we're trying to move the wrong way through a door
+		if (tile instanceof Door && ((Door)tile).getDirection() != dir){return null;}
 		
 		int x = tile.getX();
 		int y = tile.getY();
 		
+		//Get the tile in the corresponding direction
 		switch (dir){
 		case UP:
 			return y < board.length-1 ? board[x][y+1] : null;
@@ -108,7 +130,9 @@ public class Board {
 		case RIGHT:
 			return x > 0 ? board[x+1][y] : null;
 		case WARP:
-			return null; //TODO: Make this return the corresponding room
+			if (tile instanceof Warp){
+				return ((Warp)tile).getTarget();
+			}
 		}
 		return null;
 	}
@@ -127,9 +151,7 @@ public class Board {
 		
 		Map<Character, Room> rooms = parseRooms(sc);
 		Pattern intRegex = Pattern.compile("[0-9]+");	
-		
-		//TODO: Include warp declarations in the board file
-		
+				
 		//Parse the board size, and create the board
 		try{
 			width = Integer.parseInt(sc.next(intRegex));
@@ -192,9 +214,33 @@ public class Board {
 						board[i][j] = new Door(Direction.RIGHT, i, j);
 						break;
 					default:
-						throw new RuntimeException("Could not parse: Unrecognized token");
+						//Default is assume we have a warp tile token
+						Warp warp = new Warp(token, i, j);
+						
+						//Check to see if we've already found the matched warp tile
+						if (warps.containsKey(token)){
+							Warp other = warps.get(token);
+							
+							if (other == null){throw new RuntimeException("Warp tokens can only match 1 other warp token");}
+							
+							//Link the tiles
+							warp.setTarget(other);
+							other.setTarget(warp);
+							
+							//set the token to null to indicate it's been matched
+							warps.put(token, null);
+						} else {
+							warps.put(token, warp);
+						}
 					}
 				}
+			}
+		}
+		
+		//Check all warps were paired
+		for (Warp w : warps.values()){
+			if (w != null){
+				throw new RuntimeException("Unmatched warp token found");
 			}
 		}
 						
@@ -285,6 +331,19 @@ public class Board {
 		}		
 		
 		return rooms;
+	}
+	
+	@Override
+	public String toString(){
+		String rtn = "";
+		for (int i = 0; i < board.length; i++){
+			for (int j = 0; j < board[i].length; j++){
+				rtn += board[i][j];
+			}
+			rtn += "\n";
+		}
+		
+		return rtn;
 	}
 	
 	//Getters and setters

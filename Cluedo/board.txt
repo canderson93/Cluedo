@@ -7,8 +7,6 @@ I:Study;
 B:Ball Room;
 E:Billiard Room;
 D:Dining Room;
-1-KI;
-2-CG;
 26;26;
 ##########?####?##########
 #KKKKK1#___BBBB___#CCCCCC#

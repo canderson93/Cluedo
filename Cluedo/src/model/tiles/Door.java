@@ -1,5 +1,6 @@
 package model.tiles;
 
+import controller.Player;
 import model.Board.Direction;
 
 public class Door extends Tile {
@@ -41,5 +42,10 @@ public class Door extends Tile {
 		default:
 			return x == 1 && y == 0;
 		}
+	}
+	
+	@Override
+	public boolean setPlayer(Player p){
+		return room.setPlayer(p);
 	}
 }

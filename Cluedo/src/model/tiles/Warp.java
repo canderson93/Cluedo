@@ -11,10 +11,6 @@ public class Warp extends Door {
 		super(key, Direction.WARP, x, y);
 	}
 	
-	public void setTarget(Warp warp){
-		this.target = warp;
-	}
-	
 	@Override
 	public boolean canMoveTo(Tile tile) {
 		if (tile instanceof Room){return tile == room || tile == target.getRoom();}
@@ -22,5 +18,13 @@ public class Warp extends Door {
 		if (tile instanceof Door){return room.containsEntrance((Door)tile);}
 		
 		return false;
+	}
+	
+	public void setTarget(Warp warp){
+		this.target = warp;
+	}
+	
+	public Warp getTarget(){
+		return this.target;
 	}
 }
