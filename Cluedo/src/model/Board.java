@@ -70,7 +70,7 @@ public class Board {
 	}
 	
 	/**
-	 * Moves the player in the given direction
+	 * 3s the player in the given direction
 	 * 
 	 * @param player The player to be moved
 	 * @param direction The direction to move
@@ -169,8 +169,10 @@ public class Board {
 		try{
 			width = Integer.parseInt(sc.next(intRegex));
 			height = Integer.parseInt(sc.next(intRegex));
+			
 		} catch (RuntimeException e){
 			//Catch the exception if something goes wrong, and provide a more useful error
+			
 			throw new RuntimeException("Could not parse: Board dimensions not declared");
 		}
 		
@@ -335,11 +337,9 @@ public class Board {
 			
 			char key = rs[0].charAt(0);
 			Room room = new Room(rs[1], key);
-			
 			if (rooms.containsKey(key)){
 				throw new RuntimeException("Could not parse: Rooms declared with duplicate keys");
-			}
-			
+			}		
 			rooms.put(key, room);
 		}		
 		
