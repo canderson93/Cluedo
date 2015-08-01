@@ -6,6 +6,8 @@ import controller.Game;
 
 /**
  * A class for interacting with players for the Cluedo Game.
+ * 
+ * @author Carl
  *
  */
 public class UI{
