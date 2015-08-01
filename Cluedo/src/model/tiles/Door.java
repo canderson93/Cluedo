@@ -34,13 +34,13 @@ public class Door extends Tile {
 		
 		switch(dir){
 		case UP:
-			return x == 0 && y == -1;
-		case DOWN:
-			return x == 0 && y == 1;
-		case LEFT:
-			return x == -1 && y == 0;
-		case RIGHT:
 			return x == 1 && y == 0;
+		case DOWN:
+			return x == -1 && y == 0;
+		case LEFT:
+			return x == 0 && y == 1;
+		case RIGHT:
+			return x == 0 && y == -1;
 		default:
 			return false;
 		}

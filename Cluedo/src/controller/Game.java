@@ -87,8 +87,7 @@ public class Game {
 			players.add(new Player(temp,temp.charAt(0)));
 		}
 	}
-	
-	
+
 	public void nextRound(){
 		
 		this.roll = new Random().nextInt(6);
@@ -105,7 +104,7 @@ public class Game {
 			return "Can't go dat way";
 		}
 		this.rollCount--;
-		return null;
+		return "";
 	}
 	
 	/**

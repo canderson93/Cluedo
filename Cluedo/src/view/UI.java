@@ -2,10 +2,13 @@ package view;
 
 import java.util.Scanner;
 
+import model.Board.Direction;
 import controller.Game;
 
 /**
  * A class for interacting with players for the Cluedo Game.
+ * 
+ * @author Carl
  *
  */
 public class UI{
@@ -18,6 +21,10 @@ public class UI{
 	public void startGame(){
 		Scanner sc = new Scanner(System.in);
 		
+		//Start the game
+		game.nextRound();
+		redraw();
+		
 		//main game loop
 		while (true){
 			String in = sc.next();
@@ -25,42 +32,51 @@ public class UI{
 			switch(in){
 			case "u": //Up command
 			case "up":
-				System.out.println("going up");
-				continue;
+				System.out.println(game.move(Direction.UP));
+				break;
 			case "d": //Down command
 			case "down":
-				System.out.println("going down");
-				continue;
+				System.out.println(game.move(Direction.DOWN));
+				break;
 			case "l": //Left Command
 			case "left":
-				System.out.println("going left");
-				continue;
+				System.out.println(game.move(Direction.LEFT));
+				break;
 			case "r": //Right command
 			case "right":
-				System.out.println("going right");
-				continue;
+				System.out.println(game.move(Direction.RIGHT));
+				break;
 			case "s": //Shortcut command
 			case "shortcut":
-				System.out.println("Sneeeeeaky ;)");
-				continue;
+				System.out.println(game.move(Direction.WARP));
+				break;
 			case "accuse": //Accusation command
 				System.out.println("IT WAS YOU!!!!");
-				continue;
+				break;
 			case "suggest": //Suggestion command
 				System.out.println("IT WAS PROBABLY YOU!!!?!");
-				continue;
+				break;
 			case "end": //indicate the end of the round
 				System.out.println("It's over, buddy");
 				continue;
 			case "help": //Help command
 				showHelp();
 				continue;
+			case "key":
+				printKey();
+				continue;
+			case "q":
+			case "quit":
+				break; //Leave the loop
 			default:
 				System.out.println(in + "?... That sounds like something the killer would say.");
+				continue;
 			}
 			
 			redraw();
 		}
+		
+		sc.close();
 	}
 	
 	/**
@@ -90,11 +106,15 @@ public class UI{
 		
 	}
 	
+	public void printKey(){
+		
+	}
+	
 	/**
 	 * Redraws the board view, and present special options
 	 */
 	public void redraw(){
-		
+		System.out.println(game.getBoard().toString());
 	}
 	
 	/**
