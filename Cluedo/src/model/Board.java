@@ -1,7 +1,6 @@
 package model;
 
 import controller.Player;
-
 import model.tiles.Door;
 import model.tiles.Hall;
 import model.tiles.Room;
@@ -10,7 +9,7 @@ import model.tiles.Warp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -91,6 +90,20 @@ public class Board {
 		fromTile.removePlayer(player);
 		
 		return true;
+	}
+	
+	/**
+	 * Adds a player to a spawn point
+	 * @param p the player to be added
+	 */
+	public void addPlayer(Player p){
+		for (Hall h : spawns){
+			if (!h.containsPlayer()){
+				h.setPlayer(p);
+				p.setTile(h);
+				return;
+			}
+		}
 	}
 	
 	/**
@@ -348,7 +361,7 @@ public class Board {
 	
 	//Getters and setters
 	public List<Room> getRooms(){
-		List<Room> roomsList = (List<Room>) rooms.values();
+		List<Room> roomsList = new ArrayList<Room>(rooms.values());
 		return roomsList;
 	}
 }
