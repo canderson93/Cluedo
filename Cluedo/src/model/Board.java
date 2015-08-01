@@ -318,10 +318,10 @@ public class Board {
 							r = board[i - 1][j];
 							break;
 						case LEFT:
-							r = board[i - 1][j];
+							r = board[i][j + 1];
 							break;
 						case RIGHT:
-							r = board[i + 1][j];
+							r = board[i][j - 1];
 							break;
 						case WARP:
 							// Check the surrounding tiles for a room tile that
@@ -398,7 +398,7 @@ public class Board {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				try {
-					rtn += board[i][j].getKey();
+					rtn += board[i][j].getKey() + " ";
 				} catch (NullPointerException e) {
 					System.out.println(i + " " + j);
 				}

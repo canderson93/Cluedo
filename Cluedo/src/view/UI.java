@@ -33,29 +33,29 @@ public class UI{
 			case "u": //Up command
 			case "up":
 				System.out.println(game.move(Direction.UP));
-				continue;
+				break;
 			case "d": //Down command
 			case "down":
 				System.out.println(game.move(Direction.DOWN));
-				continue;
+				break;
 			case "l": //Left Command
 			case "left":
 				System.out.println(game.move(Direction.LEFT));
-				continue;
+				break;
 			case "r": //Right command
 			case "right":
 				System.out.println(game.move(Direction.RIGHT));
-				continue;
+				break;
 			case "s": //Shortcut command
 			case "shortcut":
 				System.out.println(game.move(Direction.WARP));
-				continue;
+				break;
 			case "accuse": //Accusation command
 				System.out.println("IT WAS YOU!!!!");
-				continue;
+				break;
 			case "suggest": //Suggestion command
 				System.out.println("IT WAS PROBABLY YOU!!!?!");
-				continue;
+				break;
 			case "end": //indicate the end of the round
 				System.out.println("It's over, buddy");
 				continue;
@@ -64,6 +64,7 @@ public class UI{
 				continue;
 			default:
 				System.out.println(in + "?... That sounds like something the killer would say.");
+				continue;
 			}
 			
 			redraw();
