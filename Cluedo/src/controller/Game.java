@@ -74,8 +74,14 @@ public class Game {
 
 	private void createPlayers(int numPlayers) {
 		
-		for(int i = 0; i < numPlayers; i++){
-			//
+		List<Card> dealingPlayers = new ArrayList<Card>();
+		for(int i = 0; i < 6; i++){
+			dealingPlayers.add(restOfDeck.get(i));
+		}
+		
+		for(int i = 0; i < numPlayers; i++){	
+			String temp = dealingPlayers.remove(new Random().nextInt(dealingPlayers.size())).getValue(); 
+			players.add(new Player(temp,temp.charAt(0)));
 		}
 	}
 }
