@@ -8,7 +8,7 @@ public class Door extends Tile {
 	protected Room room;
 	
 	public Door(Direction dir, int x, int y){
-		this('d', dir, x, y);
+		this('d', dir, x ,y);
 	}
 	
 	public Door(char key, Direction dir, int x, int y){
@@ -34,13 +34,13 @@ public class Door extends Tile {
 		
 		switch(dir){
 		case UP:
-			return x == 1 && y == 0;
-		case DOWN:
-			return x == -1 && y == 0;
-		case LEFT:
 			return x == 0 && y == 1;
-		case RIGHT:
+		case DOWN:
 			return x == 0 && y == -1;
+		case LEFT:
+			return x == -1 && y == 0;
+		case RIGHT:
+			return x == 1 && y == 0;
 		default:
 			return false;
 		}

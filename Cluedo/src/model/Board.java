@@ -229,35 +229,35 @@ public class Board {
 			for (int j = 0; j < height; j++) {
 				char token = line.charAt(j);
 				if (rooms.containsKey(token)) {
-					board[i][j] = rooms.get(token);
+					board[j][i] = rooms.get(token);
 				} else {
 					// Parse the default tokens
 					switch (token) {
 					case '_': // Hallway
-						board[i][j] = new Hall(i, j);
+						board[j][i] = new Hall(i, j);
 						break;
 					case '?': // Spawn Token
 						Hall h = new Hall(i, j);
 						spawns.add(h);
-						board[i][j] = h;
+						board[j][i] = h;
 						break;
 					// Door tokens
 					case 'u':
-						board[i][j] = new Door(Direction.UP, i, j);
+						board[j][i] = new Door('^', Direction.UP, i, j);
 						break;
 					case 'd':
-						board[i][j] = new Door(Direction.DOWN, i, j);
+						board[j][i] = new Door('v', Direction.DOWN, i, j);
 						break;
 					case 'l':
-						board[i][j] = new Door(Direction.LEFT, i, j);
+						board[j][i] = new Door('<', Direction.LEFT, i, j);
 						break;
 					case 'r':
-						board[i][j] = new Door(Direction.RIGHT, i, j);
+						board[j][i] = new Door('>', Direction.RIGHT, i, j);
 						break;
 					default:
 						// Default is assume we have a warp tile token
 						Warp warp = new Warp(token, i, j);
-						board[i][j] = warp;
+						board[j][i] = warp;
 
 						// Check to see if we've already found the matched warp
 						// tile
@@ -312,16 +312,16 @@ public class Board {
 					try {
 						switch (door.getDirection()) {
 						case UP:
-							r = board[i + 1][j];
+							r = board[i][j+1];
 							break;
 						case DOWN:
-							r = board[i - 1][j];
+							r = board[i][j-1];
 							break;
 						case LEFT:
-							r = board[i][j + 1];
+							r = board[i+1][j];
 							break;
 						case RIGHT:
-							r = board[i][j - 1];
+							r = board[i-1][j];
 							break;
 						case WARP:
 							// Check the surrounding tiles for a room tile that
@@ -398,7 +398,7 @@ public class Board {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				try {
-					rtn += board[i][j].getKey() + " ";
+					rtn += board[j][i].getKey() + " ";
 				} catch (NullPointerException e) {
 					System.out.println(i + " " + j);
 				}
