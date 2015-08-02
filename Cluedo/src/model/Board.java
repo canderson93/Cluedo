@@ -7,6 +7,8 @@ import model.tiles.Room;
 import model.tiles.Tile;
 import model.tiles.Warp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -150,7 +152,15 @@ public class Board {
 	 * @return
 	 */
 	public static Board parseBoard(String filename){
-		Scanner sc = new Scanner(filename);
+		Scanner sc;
+		
+		try {
+			sc = new Scanner(new File(filename));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			throw new RuntimeException("Could not parse: File not found");
+		}
+		
 		int width;
 		int height;
 
@@ -174,7 +184,8 @@ public class Board {
 		
 		//
 		Board board = new Board(width, height);
-
+		board.rooms = rooms;
+		
 		//Parse the tokens from file
 		parseTokens(sc, board);
 		linkTokens(board.board);
