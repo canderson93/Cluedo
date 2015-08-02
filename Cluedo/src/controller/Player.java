@@ -16,7 +16,7 @@ public class Player {
 	private List<Card> cards;
 	private List<Card> unseenCards;
 	private boolean playing;
-	
+	private boolean madeSuggestion;
 	private Tile tile; //The tile the player is currently standing on
 	
 	public Player(String name, char key, List<Card> allCards){
@@ -25,7 +25,19 @@ public class Player {
 		this.playing = true;
 		cards = new ArrayList<Card>();
 		this.unseenCards = allCards;
+		this.madeSuggestion = false;
 	}
+	
+	public void addCard(Card c){ 
+		this.cards.add(c); 
+		this.unseenCards.remove(c);
+	}
+	
+	public void showCard(Card c){ 
+		this.unseenCards.remove(c);
+	}
+	
+	
 	
 	/**
 	 * Getters
@@ -39,7 +51,6 @@ public class Player {
 	/**
 	 * Setters
 	 */
-	public void setCards(Card c){ this.cards.add(c); }
 	public void setTile(Tile t){ this.tile = t; }
 	public void setPlaying(boolean b) { this.playing = b; }
 }

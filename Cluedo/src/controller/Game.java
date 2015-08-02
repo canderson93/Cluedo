@@ -106,7 +106,7 @@ public class Game {
 		while(!restOfDeck.isEmpty()){
 			for(Player p: this.players){
 				if(!restOfDeck.isEmpty()){
-					p.setCards(restOfDeck.remove(new Random().nextInt(restOfDeck.size())));
+					p.addCard(restOfDeck.remove(new Random().nextInt(restOfDeck.size())));
 				}
 			}	
 		}		
@@ -135,6 +135,9 @@ public class Game {
 			this.current = this.players.get((players.indexOf(current) + 1) % players.size());
 			count--;
 		}		
+		if(count == 0){
+			this.gameComplete = true;
+		}
 		return this.current;
 	}
 	/**
@@ -151,6 +154,7 @@ public class Game {
 		//restrict the player from entering a room and then continuing their go
 		if(this.current.getTile() instanceof Room){ this.rollCount = 0;	}
 		else{ this.rollCount--; }
+		//made suggestion = false
 		return "you have " + rollCount + " rolls left";
 	}
 	/**
@@ -163,13 +167,39 @@ public class Game {
 		RoomCard room = new RoomCard(new Room(r));
 		CharacterCard character = new CharacterCard(c);
 		WeaponCard weapon = new WeaponCard(w);
-		if(this.solution.contains(room) && this.solution.contains(character) && this.solution.contains(weapon)){ return true; }
+		if(this.solution.contains(room) && this.solution.contains(character) && this.solution.contains(weapon)){ 
+			this.gameComplete = true;
+			return true; 
+		}
 		else {
 			this.current.setPlaying(false);
 			return false;
 		}
 	}
 	//public List<Card>
+	public boolean suggetion(String c, String w){
+		
+		CharacterCard character = new CharacterCard(c);
+		WeaponCard weapon = new WeaponCard(w);
+		List<Card> suggestion;
+		int count = this.players.size() - 1;
+		int i = this.players.indexOf(this.current);
+		int loop = i + 1;
+		while(loop != i){
+			if(loop == this.players.size()){ loop = 0; } //reset loop to the start of the array	
+			//if(this.players.get(loop).getHand().containsAll(suggestion))
+		}//made suggestion = true
+		//when shown a card, remove from player's unseen cards list
+		
+		return gameComplete;
+		//room is current.getTIle room 
+		//passed in character and weapon guess
+		
+		//RoomCard room = new RoomCard(new Room(r));
+		//CharacterCard character = new CharacterCard(c);
+		
+	}
+	
 	
 	/**
 	 * Getters for game logic
