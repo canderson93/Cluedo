@@ -1,9 +1,13 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import model.Board.Direction;
+import model.cards.Card;
+import model.cards.CharacterCard;
 import model.tiles.Room;
 import controller.Game;
 import controller.Player;
@@ -23,6 +27,8 @@ public class UI{
 	
 	public void startGame(){
 		Scanner sc = new Scanner(System.in);
+		
+		showHelp(); //Tell the players what they can do
 		
 		//Start the game
 		game.nextRound();
@@ -55,14 +61,16 @@ public class UI{
 				redraw(game.move(Direction.WARP));
 				continue;
 			case "accuse": //Accusation command
-				System.out.println("IT WAS YOU!!!!");
-				continue;
+				doAccusation(sc);
+				if (!game.isFinished()){game.nextRound();}
+				break;
 			case "suggest": //Suggestion command
 				System.out.println("IT WAS PROBABLY YOU!!!?!");
 				continue;
 			case "end": //indicate the end of the round
 				game.nextRound();
 				break;
+			case "h":
 			case "help": //Help command
 				showHelp();
 				continue;
@@ -79,8 +87,11 @@ public class UI{
 				continue;
 			}
 			
+			if (game.isFinished()){break;} //Put this here so that the redraw doesn't happen
 			redraw();
 		}
+		
+		System.out.println("The game is over");
 		
 		sc.close();
 	}
@@ -90,7 +101,7 @@ public class UI{
 	 */
 	public void showHelp(){
 		System.out.println("\t--Commands--");
-		System.out.println("help:\t\tshow this menu");
+		System.out.println("help/h:\t\tshow this menu");
 		System.out.println("key:\t\tshow the rooms legend");
 		System.out.println("redraw:\t\tredraw the board");
 		System.out.println("");
@@ -103,22 +114,76 @@ public class UI{
 		System.out.println("left/l:\t\tmove left one space");
 		System.out.println("right/r:\tmove right one space");
 		System.out.println("shortcut/s:\ttake the shortcut, if present");
+		System.out.println("");
 	}
 	
 	/**
 	 * Handles a player accusation 
 	 */
-	public void doAccusation(){
+	public void doAccusation(Scanner sc){		
+		String character = selectCard(sc, game.getCharacter(), "Who was the murderer? ");
+		String weapon = selectCard(sc, game.getWeapons(), "What was the weapon?");
+		String room = selectCard(sc, game.getRoom(), "Where did they do it?");
+		
+		if (game.accusation(room, character, weapon)){
+			System.out.println("That's correct! You win the game!");
+		} else {
+			System.out.println("That's not correct. Games up, buddy.");
+		}
+	}
+
+	/**
+	 * Handles a player suggestion
+	 */
+	public void doSuggestion(Scanner sc){
+		String character = selectCard(sc, game.getCharacter(), "Who was the murderer? ");
+		String weapon = selectCard(sc, game.getWeapons(), "What was the weapon?");
 		
 	}
 	
 	/**
-	 * Handles a player suggestion
+	 * Prints a list of cards, and returns the string of the selected card
+	 * 
+	 * @param sc
+	 * @param msg The message to 
+	 * @return
 	 */
-	public void doSuggestion(){
+	private String selectCard(Scanner sc, List<? extends Card> cards, String msg){
+		int index = 0; //the index the character selects
 		
+		System.out.println(msg);
+		for (int i = 0; i < cards.size() ; i++){
+			System.out.print((i+1)+":\t"+toTitleCase(cards.get(i).getValue()));
+			
+			if (!game.getCurrent().getUnseenCards().contains(cards.get(i))){
+				System.out.print(" *** Seen");
+			}
+			
+			System.out.print("\r\n");
+		}
+		
+		//Try get user input until a valid response is given
+		while (sc.hasNext()){
+			try{
+				index = Integer.parseInt(sc.next());
+				
+				//If it's a valid input, break out of the loop
+				if (index > 0 && index <= cards.size()){
+					break;
+				}
+				
+				System.out.println("You have to select a number between 1 and " + cards.size());
+			} catch (NumberFormatException e){
+				System.out.println("Input the number of the character to select");
+			}
+		}
+				
+		return cards.get(index-1).getValue();
 	}
 	
+	/**
+	 * Prints a list of all the rooms, and their associated keys
+	 */
 	public void printKey(){
 		List<Room> rooms = game.getBoard().getRooms();
 		
@@ -139,6 +204,8 @@ public class UI{
 			Room r = (Room)p.getTile();
 			System.out.println("You are in the "+r.getName());
 		}
+		
+		System.out.print("Input command, or h for help: ");
 	}
 	
 	/**
