@@ -84,13 +84,15 @@ public class Game {
 		
 		for(int i = 0; i < numPlayers; i++){	
 			String temp = dealingPlayers.remove(new Random().nextInt(dealingPlayers.size())).getValue(); 
-			players.add(new Player(temp,temp.charAt(0)));
+			Player p = new Player(temp,temp.charAt(0));
+			this.board.addPlayer(p);
+			players.add(p);
 		}
 	}
 
 	public void nextRound(){
 		
-		this.roll = new Random().nextInt(6);
+		this.roll = new Random().nextInt(6) + 1;
 		this.rollCount = roll;
 		this.current = this.players.get((players.indexOf(current) + 1) % players.size());
 		//System.out.println("current player = " + this.current.getName());
@@ -104,6 +106,7 @@ public class Game {
 			return "Can't go dat way";
 		}
 		this.rollCount--;
+		System.out.println("you have " + rollCount + " rolls left");
 		return "";
 	}
 	
