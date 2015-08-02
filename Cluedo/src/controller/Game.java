@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import model.Board;
 import model.cards.*;
 import model.tiles.Room;
@@ -13,14 +12,17 @@ import model.Board.Direction;
 /**
  * The main class for controlling game logic
  * @author Chloe
+ * 
  */
 public class Game {
 	
 	private Board board;
 	private boolean gameComplete;
 	List<Card> solution;
-	List<Card> restOfDeck;
 	List<Player> players;
+	List<WeaponCard> weapons;
+	List<CharacterCard> characters;
+	List<RoomCard> rooms;
 	int roll;
 	int rollCount;
 	Player current;
@@ -29,8 +31,10 @@ public class Game {
 		this.board = Board.parseBoard(filename);
 		this.gameComplete = false;
 		this.solution = new ArrayList<Card>();
-		this.restOfDeck = new ArrayList<Card>();
 		this.players = new ArrayList<Player>();
+		this.weapons = new ArrayList<WeaponCard>();
+		this.characters = new ArrayList<CharacterCard>();
+		this.rooms = new ArrayList<RoomCard>();
 		loadCards();
 		createPlayers(numPlayers);
 		this.current = this.players.get(0);
@@ -43,15 +47,13 @@ public class Game {
 	 */
 	private void loadCards(){
 		
-		List<Card> weapons = new ArrayList<Card>();
 		for(Weapons w: Weapons.values()){
-			weapons.add(new WeaponCard(w.name()));
+			this.weapons.add(new WeaponCard(w.name()));
 		}
-		List<Card> characters = new ArrayList<Card>();
+		
 		for(Characters c: Characters.values()){
-			characters.add(new CharacterCard(c.name()));
+			this.characters.add(new CharacterCard(c.name()));
 		}		
-		List<Card> rooms = new ArrayList<Card>();
 		List<Room> roomObj = new ArrayList<Room>();
 		roomObj = board.getRooms();
 		for(Room r: roomObj){
@@ -59,17 +61,14 @@ public class Game {
 		}
 		createSolution(characters);
 		createSolution(weapons);
-		createSolution(rooms);
-		restOfDeck.addAll(characters);
-		restOfDeck.addAll(weapons);
-		restOfDeck.addAll(rooms);		
+		createSolution(rooms);	
 	}
 	
 	/**
-	 * Randomly generate a card from each of the three sets of cards
+	 * Randomly generate a card from each of the three sets of cards using a WILDCARD
 	 *	@param cards
 	 */
-	private void createSolution(List<Card> cards) {	
+	private void createSolution(List<? extends Card> cards) {	
 		Card randomItem = cards.get(new Random().nextInt(cards.size()));
 		this.solution.add(randomItem);
 	}	
@@ -78,14 +77,15 @@ public class Game {
 		//create a list of all of the character cards
 		List<Card> dealingPlayers = new ArrayList<Card>();
 		for(int i = 0; i < 6; i++){
-			dealingPlayers.add(restOfDeck.get(i));
+			dealingPlayers.add(this.characters.get(i));
 		}	
 		//create players with random characters chosen from the list of characters
 		for(int i = 0; i < numPlayers; i++){	
 			String temp = dealingPlayers.remove(new Random().nextInt(dealingPlayers.size())).getValue(); 
 			//create a list of all of the cards (including the solution)
-			List<Card> allCards = this.solution;
-			allCards.addAll(this.restOfDeck);
+			List<Card> allCards = new ArrayList<Card>(this.weapons);
+			allCards.addAll(this.rooms);
+			allCards.addAll(this.characters);
 			//create specified number of players with their random character card and give them a list of all of the possible cards
 			Player p = new Player(temp,temp.charAt(0), allCards);
 			//add each player to the board and a list of all of the players
@@ -98,11 +98,15 @@ public class Game {
 	 *	
 	 * */
 	private void dealRemainder(){
-		
-		while(!this.restOfDeck.isEmpty()){
+		List<Card> restOfDeck = new ArrayList<Card>();
+		restOfDeck.addAll(characters);
+		restOfDeck.addAll(weapons);
+		restOfDeck.addAll(rooms);	
+		restOfDeck.removeAll(this.solution); //remove the solution before dealing the cards out
+		while(!restOfDeck.isEmpty()){
 			for(Player p: this.players){
-				if(this.restOfDeck.size() > 0){
-					p.setCards(this.restOfDeck.remove(new Random().nextInt(this.restOfDeck.size())));
+				if(!restOfDeck.isEmpty()){
+					p.setCards(restOfDeck.remove(new Random().nextInt(restOfDeck.size())));
 				}
 			}	
 		}		
@@ -144,7 +148,9 @@ public class Game {
 		if(!this.board.move(this.current, d)){
 			return "Can't go dat way";
 		}
-		this.rollCount--;
+		//restrict the player from entering a room and then continuing their go
+		if(this.current.getTile() instanceof Room){ this.rollCount = 0;	}
+		else{ this.rollCount--; }
 		return "you have " + rollCount + " rolls left";
 	}
 	/**
@@ -175,7 +181,9 @@ public class Game {
 	public int getRoll(){ return this.roll; }
 	public Player getCurrent(){ return this.current; }
 	public boolean isFinished(){ return this.gameComplete; }
-	
+	public List<WeaponCard> getWeapons(){ return this.weapons; }
+	public List<CharacterCard> getCharacter(){ return this.characters; }
+	public List<RoomCard> getRoom(){ return this.rooms; }
 	/**
 	 * For testing: Remove randomness
 	 *	
