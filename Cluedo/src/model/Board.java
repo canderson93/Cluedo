@@ -7,8 +7,6 @@ import model.tiles.Room;
 import model.tiles.Tile;
 import model.tiles.Warp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,28 +39,6 @@ public class Board {
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				board[i][j] = new Hall(i, j);
-			}
-		}
-	}
-
-	/**
-	 * Creates and parses a new board from file
-	 * 
-	 * @param filename
-	 */
-	public Board(String filename) {
-		Scanner sc = null;
-
-		try {
-			// Create a scanner, and parse the board
-			sc = new Scanner(new File(filename));
-			this.board = parseBoard(sc);
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not find the file " + filename);
-			e.printStackTrace();
-		} finally {
-			if (sc != null) {
-				sc.close();
 			}
 		}
 	}
@@ -173,17 +149,19 @@ public class Board {
 	 * @param sc
 	 * @return
 	 */
-	private Tile[][] parseBoard(Scanner sc) {
-		Tile[][] board;
+	public static Board parseBoard(String filename){
+		Scanner sc = new Scanner(filename);
 		int width;
 		int height;
 
 		sc.useDelimiter("[;\r\n]+");
 
+		//Parse the rooms from the file
 		Map<Character, Room> rooms = parseRooms(sc);
+		
 		Pattern intRegex = Pattern.compile("[0-9]+");
-
-		// Parse the board size, and create the board
+		
+		// Parse the board
 		try {
 			width = Integer.parseInt(sc.next(intRegex));
 			height = Integer.parseInt(sc.next(intRegex));
@@ -191,13 +169,17 @@ public class Board {
 		} catch (RuntimeException e) {
 			// Catch the exception if something goes wrong, and provide a more
 			// useful error
-
-			throw new RuntimeException(
-					"Could not parse: Board dimensions not declared");
+			throw new RuntimeException("Could not parse: Board dimensions not declared");
 		}
+		
+		//
+		Board board = new Board(width, height);
 
-		board = parseTokens(sc, rooms, width, height);
-		linkTokens(board);
+		//Parse the tokens from file
+		parseTokens(sc, board);
+		linkTokens(board.board);
+		
+		sc.close();
 
 		return board;
 	}
@@ -209,10 +191,12 @@ public class Board {
 	 * @param width
 	 * @param height
 	 */
-	private Tile[][] parseTokens(Scanner sc, Map<Character, Room> rooms,
-			int width, int height) {
-		Tile[][] board = new Tile[width][height];
+	private static Tile[][] parseTokens(Scanner sc, Board b) {
 		String line;
+		int width = b.board.length;
+		int height = width > 0 ? b.board[0].length : 0;
+		
+		Tile[][] board = b.board;
 
 		// Maps the tiles to the warps
 		Map<Character, Warp> warps = new HashMap<Character, Warp>();
@@ -226,8 +210,8 @@ public class Board {
 
 			for (int j = 0; j < height; j++) {
 				char token = line.charAt(j);
-				if (rooms.containsKey(token)) {
-					board[j][i] = rooms.get(token);
+				if (b.rooms.containsKey(token)) {
+					board[j][i] = b.rooms.get(token);
 				} else {
 					// Parse the default tokens
 					switch (token) {
@@ -236,7 +220,7 @@ public class Board {
 						break;
 					case '?': // Spawn Token
 						Hall h = new Hall(j, i);
-						spawns.add(h);
+						b.spawns.add(h);
 						board[j][i] = h;
 						break;
 					// Door tokens
@@ -297,7 +281,7 @@ public class Board {
 	 * 
 	 * @param board
 	 */
-	private void linkTokens(Tile[][] board) {
+	private static void linkTokens(Tile[][] board) {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				Tile tile = board[i][j];
@@ -367,8 +351,9 @@ public class Board {
 	 * 
 	 * @param sc
 	 */
-	private Map<Character, Room> parseRooms(Scanner sc) {
+	private static Map<Character, Room> parseRooms(Scanner sc) {
 		Pattern roomReg = Pattern.compile("[A-Z]:.+");
+		Map<Character, Room> rooms = new HashMap<Character, Room>();
 
 		// This is a special case room key for squares the player can't go
 		rooms.put('#', new Room("Blank", '#'));

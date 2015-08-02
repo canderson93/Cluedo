@@ -26,7 +26,7 @@ public class Game {
 	Player current;
 	
 	public Game(String filename, int numPlayers){
-		this.board = new Board(filename);
+		this.board = Board.parseBoard(filename);
 		this.gameComplete = false;
 		this.solution = new ArrayList<Card>();
 		this.restOfDeck = new ArrayList<Card>();

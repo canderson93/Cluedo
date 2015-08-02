@@ -66,14 +66,14 @@ public class UI{
 			case "help": //Help command
 				showHelp();
 				continue;
-			case "key":
+			case "key": //show key command
 				printKey();
 				continue;
-			case "q":
+			case "q": //quit command
 			case "quit":
-				break gameLoop; //Leave the loop
+				break gameLoop;
 			case "redraw":
-				break; //do nothing, but break the loop
+				break;
 			default:
 				System.out.println(in + "?... That sounds like something the killer would say.");
 				continue;
