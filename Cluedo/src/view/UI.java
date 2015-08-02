@@ -1,8 +1,10 @@
 package view;
 
+import java.util.List;
 import java.util.Scanner;
 
 import model.Board.Direction;
+import model.tiles.Room;
 import controller.Game;
 
 /**
@@ -69,6 +71,8 @@ public class UI{
 			case "q":
 			case "quit":
 				break gameLoop; //Leave the loop
+			case "redraw":
+				break; //do nothing, but break the loop
 			default:
 				System.out.println(in + "?... That sounds like something the killer would say.");
 				continue;
@@ -108,7 +112,12 @@ public class UI{
 	}
 	
 	public void printKey(){
+		List<Room> rooms = game.getBoard().getRooms();
 		
+		System.out.println("Rooms:");
+		for (Room r : rooms){
+			System.out.println(r.getKey() + ": " + r.getName());
+		}
 	}
 	
 	/**
