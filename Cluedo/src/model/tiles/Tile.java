@@ -60,6 +60,7 @@ public abstract class Tile {
 		if (player != null){return false;}
 		
 		this.player = p;
+		p.setTile(this);
 		return true;
 	}
 	

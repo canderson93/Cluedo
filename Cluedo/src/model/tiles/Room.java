@@ -1,12 +1,18 @@
 package model.tiles;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import controller.Player;
 
 public class Room extends Tile {
 	//The name of the room, and the letter to represent it on the board
 	private final String name;
 	private List<Door> entrances = new ArrayList<Door>();
+	private Set<Player> players = new HashSet<Player>(); //The players currently inside this room
+
 	
 	public Room(String name, char key){
 		super(key, -1, -1); //don't have x and y positions for this
@@ -48,6 +54,20 @@ public class Room extends Tile {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public boolean setPlayer(Player p){
+		if (players.add(p)){
+			p.setTile(this);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void removePlayer(Player p){
+		players.remove(p);
 	}
 	
 	@Override

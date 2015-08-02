@@ -6,6 +6,7 @@ import java.util.Scanner;
 import model.Board.Direction;
 import model.tiles.Room;
 import controller.Game;
+import controller.Player;
 
 /**
  * A class for interacting with players for the Cluedo Game.
@@ -35,33 +36,33 @@ public class UI{
 			switch(in){
 			case "u": //Up command
 			case "up":
-				System.out.println(game.move(Direction.UP));
-				break;
+				redraw(game.move(Direction.UP));
+				continue;
 			case "d": //Down command
 			case "down":
-				System.out.println(game.move(Direction.DOWN));
-				break;
+				redraw(game.move(Direction.DOWN));
+				continue;
 			case "l": //Left Command
 			case "left":
-				System.out.println(game.move(Direction.LEFT));
-				break;
+				redraw(game.move(Direction.LEFT));
+				continue;
 			case "r": //Right command
 			case "right":
-				System.out.println(game.move(Direction.RIGHT));
-				break;
+				redraw(game.move(Direction.RIGHT));
+				continue;
 			case "s": //Shortcut command
 			case "shortcut":
-				System.out.println(game.move(Direction.WARP));
-				break;
+				redraw(game.move(Direction.WARP));
+				continue;
 			case "accuse": //Accusation command
 				System.out.println("IT WAS YOU!!!!");
-				break;
+				continue;
 			case "suggest": //Suggestion command
 				System.out.println("IT WAS PROBABLY YOU!!!?!");
-				break;
-			case "end": //indicate the end of the round
-				System.out.println("It's over, buddy");
 				continue;
+			case "end": //indicate the end of the round
+				game.nextRound();
+				break;
 			case "help": //Help command
 				showHelp();
 				continue;
@@ -90,6 +91,13 @@ public class UI{
 	public void showHelp(){
 		System.out.println("\t--Commands--");
 		System.out.println("help:\t\tshow this menu");
+		System.out.println("key:\t\tshow the rooms legend");
+		System.out.println("redraw:\t\tredraw the board");
+		System.out.println("");
+		System.out.println("accuse:\t\tguess the solution");
+		System.out.println("suggest:\tmake a suggestion");
+		System.out.println("end:\t\tend your turn");
+		System.out.println("");
 		System.out.println("up/u:\t\tmove up one space");
 		System.out.println("down/d:\t\tmove down one space");
 		System.out.println("left/l:\t\tmove left one space");
@@ -124,7 +132,22 @@ public class UI{
 	 * Redraws the board view, and present special options
 	 */
 	public void redraw(){
-		System.out.println(game.getBoard().toString());
+		Player p = game.getCurrent();
+		System.out.print(game.getBoard().toString());
+		System.out.println("Player: "+toTitleCase(p.getName())+ " ("+p.getKey()+")");
+		if (p.getTile() instanceof Room){
+			Room r = (Room)p.getTile();
+			System.out.println("You are in the "+r.getName());
+		}
+	}
+	
+	/**
+	 * Redraws the board view, showing a message beneath it
+	 * @param msg
+	 */
+	public void redraw(String msg){
+		redraw();
+		System.out.println(msg);
 	}
 	
 	/**
@@ -148,7 +171,7 @@ public class UI{
 		boolean firstChar = true;
 		
 		for (int i = 0; i < orig.length(); i++){
-			char c = orig.charAt(0);
+			char c = orig.charAt(i);
 			
 			//Convert underscores to spaces, and update whether this is the first letter
 			//in a word
@@ -161,6 +184,7 @@ public class UI{
 			//Apply title case rules
 			if (firstChar){
 				rtn += Character.toUpperCase(c);
+				firstChar = false;
 			} else {
 				rtn += Character.toLowerCase(c);
 			}
@@ -190,7 +214,7 @@ public class UI{
 				startNewGame("board.txt", num);
 				break; //Break the loop if everything is fine
 			} catch (NumberFormatException e){
-				System.out.println("That isn't a valid suggestion. Try a number next time.");
+				System.out.print("That isn't a valid suggestion. Try a number next time.");
 			}
 		}
 		

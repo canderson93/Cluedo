@@ -38,9 +38,9 @@ public class Door extends Tile {
 		case DOWN:
 			return x == 0 && y == -1;
 		case LEFT:
-			return x == -1 && y == 0;
-		case RIGHT:
 			return x == 1 && y == 0;
+		case RIGHT:
+			return x == -1 && y == 0;
 		default:
 			return false;
 		}

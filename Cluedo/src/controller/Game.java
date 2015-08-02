@@ -106,8 +106,7 @@ public class Game {
 			return "Can't go dat way";
 		}
 		this.rollCount--;
-		System.out.println("you have " + rollCount + " rolls left");
-		return "";
+		return "you have " + rollCount + " rolls left";
 	}
 	
 	/**

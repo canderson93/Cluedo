@@ -94,10 +94,8 @@ public class Board {
 			return false;
 		}
 
-		// If everythings okay, remove the player the old tile,
-		// and update it's tile
+		// If everythings okay, remove the player the old tile
 		fromTile.removePlayer(player);
-		player.setTile(toTile);
 
 		return true;
 	}
@@ -154,13 +152,13 @@ public class Board {
 		// Get the tile in the corresponding direction
 		switch (dir) {
 		case UP:
-			return y < board.length - 1 ? board[x][y + 1] : null;
-		case DOWN:
 			return y > 0 ? board[x][y - 1] : null;
+		case DOWN:
+			return y < board.length - 1 ? board[x][y + 1] : null;
 		case LEFT:
 			return x > 0 ? board[x - 1][y] : null;
 		case RIGHT:
-			return x > 0 ? board[x + 1][y] : null;
+			return x < board.length - 1 ? board[x + 1][y] : null;
 		case WARP:
 			if (tile instanceof Warp) {
 				return ((Warp) tile).getTarget();
@@ -234,29 +232,29 @@ public class Board {
 					// Parse the default tokens
 					switch (token) {
 					case '_': // Hallway
-						board[j][i] = new Hall(i, j);
+						board[j][i] = new Hall(j, i);
 						break;
 					case '?': // Spawn Token
-						Hall h = new Hall(i, j);
+						Hall h = new Hall(j, i);
 						spawns.add(h);
 						board[j][i] = h;
 						break;
 					// Door tokens
 					case 'u':
-						board[j][i] = new Door('^', Direction.UP, i, j);
+						board[j][i] = new Door('^', Direction.UP, j, i);
 						break;
 					case 'd':
-						board[j][i] = new Door('v', Direction.DOWN, i, j);
+						board[j][i] = new Door('v', Direction.DOWN, j, i);
 						break;
 					case 'l':
-						board[j][i] = new Door('<', Direction.LEFT, i, j);
+						board[j][i] = new Door('<', Direction.LEFT, j, i);
 						break;
 					case 'r':
-						board[j][i] = new Door('>', Direction.RIGHT, i, j);
+						board[j][i] = new Door('>', Direction.RIGHT, j, i);
 						break;
 					default:
 						// Default is assume we have a warp tile token
-						Warp warp = new Warp(token, i, j);
+						Warp warp = new Warp(token, j, i);
 						board[j][i] = warp;
 
 						// Check to see if we've already found the matched warp
