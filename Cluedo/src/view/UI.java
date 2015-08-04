@@ -139,6 +139,12 @@ public class UI{
 		String character = selectCard(sc, game.getCharacter(), "Who was the murderer? ");
 		String weapon = selectCard(sc, game.getWeapons(), "What was the weapon?");
 		
+		Card matched = game.suggetion(character, weapon);
+		if (matched == null){
+			System.out.println("Nobody had any cards from your suggestion");
+		} else {
+			System.out.println("You were shown "+toTitleCase(matched.getValue()));
+		}
 	}
 	
 	/**
