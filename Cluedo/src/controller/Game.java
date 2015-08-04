@@ -57,7 +57,7 @@ public class Game {
 		List<Room> roomObj = new ArrayList<Room>();
 		roomObj = board.getRooms();
 		for(Room r: roomObj){
-			if(r.getName() != "Blank"){ rooms.add(new RoomCard(r)); }
+			if(r.getName() != "Blank"){ rooms.add(new RoomCard(r.getName())); }
 		}
 		createSolution(characters);
 		createSolution(weapons);
@@ -164,7 +164,7 @@ public class Game {
 	 */
 	public boolean accusation(String r, String c, String w){
 		
-		RoomCard room = new RoomCard(new Room(r));
+		RoomCard room = new RoomCard(r);
 		CharacterCard character = new CharacterCard(c);
 		WeaponCard weapon = new WeaponCard(w);
 		if(this.solution.contains(room) && this.solution.contains(character) && this.solution.contains(weapon)){ 

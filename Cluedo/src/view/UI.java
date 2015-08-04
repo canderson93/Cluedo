@@ -9,6 +9,7 @@ import model.Board.Direction;
 import model.cards.Card;
 import model.cards.CharacterCard;
 import model.tiles.Room;
+import model.tiles.Tile;
 import controller.Game;
 import controller.Player;
 
@@ -136,10 +137,20 @@ public class UI{
 	 * Handles a player suggestion
 	 */
 	public void doSuggestion(Scanner sc){
+		Tile t = game.getCurrent().getTile();
+		Room room;
+		
+		if (!(t instanceof Room)){
+			System.out.println("You have to be in a room to make a suggestion");
+			return;
+		} else {
+			room = (Room)t;
+		}
+		
 		String character = selectCard(sc, game.getCharacter(), "Who was the murderer? ");
 		String weapon = selectCard(sc, game.getWeapons(), "What was the weapon?");
 		
-		Card matched = game.suggetion(character, weapon);
+		Card matched = game.suggestion(character, weapon, room);
 		if (matched == null){
 			System.out.println("Nobody had any cards from your suggestion");
 		} else {
