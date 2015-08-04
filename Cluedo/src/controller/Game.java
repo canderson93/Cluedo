@@ -177,11 +177,11 @@ public class Game {
 		}
 	}
 	//public List<Card>
-	public Card suggetion(String c, String w, Room r){
+	public Card suggestion(String c, String w, Room r){
 		
 		CharacterCard character = new CharacterCard(c);
 		WeaponCard weapon = new WeaponCard(w);
-		RoomCard room = new RoomCard(r);
+		RoomCard room = new RoomCard(r.getName());
 		List<Card> suggestion = new ArrayList<Card>();
 		suggestion.add(character);
 		suggestion.add(weapon);
@@ -190,7 +190,7 @@ public class Game {
 		int loop = this.players.indexOf(this.current);
 		int i = loop + 1;
 		while(loop != i){
-			if(i == this.players.size()){ loop = 0; } //reset loop to the start of the array
+			if(i == this.players.size()){ i = 0; } //reset loop to the start of the array
 			for(Card card: suggestion){
 				if(this.players.get(i).getHand().contains(card)){
 					this.current.getUnseenCards().add(card);
