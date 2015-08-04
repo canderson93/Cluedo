@@ -177,29 +177,29 @@ public class Game {
 		}
 	}
 	//public List<Card>
-	public boolean suggetion(String c, String w){
+	public Card suggetion(String c, String w, Room r){
 		
 		CharacterCard character = new CharacterCard(c);
 		WeaponCard weapon = new WeaponCard(w);
-		List<Card> suggestion;
+		RoomCard room = new RoomCard(r);
+		List<Card> suggestion = new ArrayList<Card>();
+		suggestion.add(character);
+		suggestion.add(weapon);
+		suggestion.add(room);
 		int count = this.players.size() - 1;
-		int i = this.players.indexOf(this.current);
-		int loop = i + 1;
+		int loop = this.players.indexOf(this.current);
+		int i = loop + 1;
 		while(loop != i){
-			if(loop == this.players.size()){ loop = 0; } //reset loop to the start of the array	
-			//if(this.players.get(loop).getHand().containsAll(suggestion))
-		}//made suggestion = true
-		//when shown a card, remove from player's unseen cards list
-		
-		return gameComplete;
-		//room is current.getTIle room 
-		//passed in character and weapon guess
-		
-		//RoomCard room = new RoomCard(new Room(r));
-		//CharacterCard character = new CharacterCard(c);
-		
+			if(i == this.players.size()){ loop = 0; } //reset loop to the start of the array
+			for(Card card: suggestion){
+				if(this.players.get(i).getHand().contains(card)){
+					this.current.getUnseenCards().add(card);
+					return card;
+				}
+			}
+		}	
+		return null;
 	}
-	
 	
 	/**
 	 * Getters for game logic
