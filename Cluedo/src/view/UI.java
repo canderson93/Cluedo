@@ -70,6 +70,7 @@ public class UI{
 				continue;
 			case "end": //indicate the end of the round
 				game.nextRound();
+				redraw("You rolled a "+game.getRoll());
 				break;
 			case "h":
 			case "help": //Help command
