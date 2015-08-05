@@ -15,7 +15,7 @@ public class Player {
 	private final String name;
 	private final char key;
 	private List<Card> cards;
-	private List<Card> unseenCards;
+	private List<Card> unseenCards; //cards the player hasn't seen, this is updated throughout the game
 	private boolean playing;
 	private Room lastSuggestion;
 	private Tile tile; //The tile the player is currently standing on
@@ -37,8 +37,6 @@ public class Player {
 	public void showCard(Card c){ 
 		this.unseenCards.remove(c);
 	}
-	
-	
 	
 	/**
 	 * Getters
