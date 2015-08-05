@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -202,6 +203,12 @@ public class UI{
 			System.out.println("Nobody had any cards from your suggestion");
 		} else {
 			System.out.println("You were shown "+toTitleCase(matched.getValue()));
+		}
+		
+		try{
+			System.in.read();
+		} catch (IOException e){
+			System.out.println("Big time exception");
 		}
 		
 		nextRound();

@@ -9,6 +9,7 @@ import java.util.Random;
 import model.Board;
 import model.cards.*;
 import model.tiles.Room;
+import model.tiles.Tile;
 import model.Weapons;
 import model.Characters;
 import model.Board.Direction;
@@ -20,16 +21,16 @@ import model.Board.Direction;
 public class Game {
 	
 	private Board board;
-	private boolean gameComplete;
+	private boolean gameComplete = false;
 	private Player winner = null;
 	
-	List<Card> solution;
-	List<Player> players;
+	List<Card> solution = new ArrayList<Card>();
+	List<Player> players = new ArrayList<Player>();
 	
 	//Complete list of all cards in the deck
-	List<WeaponCard> weapons;
-	List<CharacterCard> characters;
-	List<RoomCard> rooms;
+	List<WeaponCard> weapons = new ArrayList<WeaponCard>();
+	List<CharacterCard> characters = new ArrayList<CharacterCard>();
+	List<RoomCard> rooms = new ArrayList<RoomCard>();
 	
 	int roll;
 	int rollCount;
@@ -37,12 +38,7 @@ public class Game {
 	
 	public Game(String filename, int numPlayers){
 		this.board = Board.parseBoard(filename);
-		this.gameComplete = false;
-		this.solution = new ArrayList<Card>();
-		this.players = new ArrayList<Player>();
-		this.weapons = new ArrayList<WeaponCard>();
-		this.characters = new ArrayList<CharacterCard>();
-		this.rooms = new ArrayList<RoomCard>();
+		
 		loadCards();
 		createPlayers(numPlayers);
 		this.current = this.players.get(0);
@@ -116,11 +112,15 @@ public class Game {
 	 *	
 	 * */
 	private void dealRemainder(){
+		//Join all the card collections to make the rest of the deck
 		List<Card> restOfDeck = new ArrayList<Card>();
 		restOfDeck.addAll(characters);
 		restOfDeck.addAll(weapons);
 		restOfDeck.addAll(rooms);	
+		
 		restOfDeck.removeAll(this.solution); //remove the solution before dealing the cards out
+		
+		//Deal out the cards
 		while(!restOfDeck.isEmpty()){
 			for(Player p: this.players){
 				if(!restOfDeck.isEmpty()){
@@ -167,7 +167,7 @@ public class Game {
 		
 		if(this.rollCount == 0){ return "You have no more rolls. Type end to end your turn."; }
 		if(!this.board.move(this.current, d)){
-			return "Can't go dat way";
+			return "Can't go that way";
 		}
 		//restrict the player from entering a room and then continuing their go
 		if(this.current.getTile() instanceof Room){ this.rollCount = 0;	}
@@ -223,6 +223,27 @@ public class Game {
 		WeaponCard weapon = new WeaponCard(w);
 		RoomCard room = new RoomCard(r.getName());
 		List<Card> suggestion = new ArrayList<Card>();
+		
+		Weapons suggestedWeapon = Weapons.valueOf(w);
+		
+		//Move the weapon to the room
+		r.addWeapon(suggestedWeapon);
+		for (Room rooms : board.getRooms()){
+			if (rooms.containsWeapon(suggestedWeapon)){
+				rooms.removeWeapon(suggestedWeapon);
+				break;
+			}
+		}
+		
+		//Look for a player matching the character, and then move them to the room as well
+		for (Player p : players){
+			if (p.getName().equals(c)){
+				Tile t = p.getTile();
+				r.setPlayer(p);
+				t.removePlayer(p);
+				break;
+			}
+		}
 		
 		this.current.setLastSuggestion(r);
 		

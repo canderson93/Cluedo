@@ -8,7 +8,7 @@ package model.tiles;
 public class Hall extends Tile{
 	
 	public Hall(int x, int y){
-		super('_', x, y);
+		super(' ', x, y);
 	}
 
 	@Override

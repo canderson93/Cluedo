@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import model.Weapons;
 import controller.Player;
 
 public class Room extends Tile {
@@ -12,6 +13,7 @@ public class Room extends Tile {
 	private final String name;
 	private List<Door> entrances = new ArrayList<Door>();
 	private Set<Player> players = new HashSet<Player>(); //The players currently inside this room
+	private Set<Weapons> weapons = new HashSet<Weapons>();
 
 	
 	public Room(String name, char key){
@@ -30,6 +32,18 @@ public class Room extends Tile {
 	
 	public boolean containsEntrance(Door door){
 		return entrances.contains(door);
+	}
+	
+	public void addWeapon(Weapons wep){
+		weapons.add(wep);
+	}
+	
+	public void removeWeapon(Weapons wep){
+		weapons.remove(wep);
+	}
+	
+	public boolean containsWeapon(Weapons wep){
+		return weapons.contains(wep);
 	}
 	
 	/**
