@@ -3,6 +3,11 @@ package model.tiles;
 import controller.Player;
 import model.Board.Direction;
 
+/**
+ * A class to represent a door tile, which allows access to a room.
+ * @author Carl
+ *
+ */
 public class Door extends Tile {
 	protected final Direction dir;
 	protected Room room;
@@ -15,12 +20,6 @@ public class Door extends Tile {
 		super(key, x, y);
 		this.dir = dir;
 	}
-	
-	//Getters and setters
-	public void setRoom(Room room){this.room = room;}
-	
-	public Direction getDirection(){return dir;}
-	public Room getRoom(){return room;}
 
 	@Override
 	public boolean canMoveTo(Tile tile) {
@@ -46,8 +45,15 @@ public class Door extends Tile {
 		}
 	}
 	
+
+	//Getters and setters
+	public void setRoom(Room room){this.room = room;}
+	
 	@Override
 	public boolean setPlayer(Player p){
 		return room.setPlayer(p);
 	}
+	
+	public Direction getDirection(){return dir;}
+	public Room getRoom(){return room;}
 }

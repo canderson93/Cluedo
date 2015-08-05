@@ -3,7 +3,7 @@ package model.tiles;
 import controller.Player;
 
 /**
- * The tile 
+ * A representation of a space on the cluedo board
  * @author Carl
  *
  */
@@ -64,6 +64,10 @@ public abstract class Tile {
 		return true;
 	}
 	
+	/**
+	 * Removes the player from the room, if present
+	 * @param p
+	 */
 	public void removePlayer(Player p){
 		if (this.player == p){
 			this.player = null;

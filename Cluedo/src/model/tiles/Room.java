@@ -8,6 +8,12 @@ import java.util.Set;
 import model.Weapons;
 import controller.Player;
 
+/**
+ * A class to represent a room in the cluedo game.
+ * This can hold multiple players, unlike other Tile classes.
+ * @author Carl
+ *
+ */
 public class Room extends Tile {
 	//The name of the room, and the letter to represent it on the board
 	private final String name;
@@ -25,39 +31,49 @@ public class Room extends Tile {
 		this(name, name.charAt(0));
 	}
 	
+	/**
+	 * Specify a door as an entry point to this room
+	 * @param door
+	 */
 	public void addEntrance(Door door){
 		entrances.add(door);
 		door.setRoom(this);
 	}
 	
+	/**
+	 * Determine whether a door belongs to this room
+	 * @param door
+	 * @return
+	 */
 	public boolean containsEntrance(Door door){
 		return entrances.contains(door);
 	}
 	
+	/**
+	 * Add a weapon to this room
+	 * @param wep
+	 */
 	public void addWeapon(Weapons wep){
 		weapons.add(wep);
 	}
 	
+	/**
+	 * Remove the weapon from the room
+	 * @param wep
+	 */
 	public void removeWeapon(Weapons wep){
 		weapons.remove(wep);
 	}
 	
+	/**
+	 * Determines whether the room contains a weapon
+	 * @param wep
+	 * @return
+	 */
 	public boolean containsWeapon(Weapons wep){
 		return weapons.contains(wep);
 	}
 	
-	/**
-	 * The name of the room
-	 * @return
-	 */
-	public String getName(){return name;}
-	
-	//Returns a copy of the rooms entrances
-	public List<Door> getEntrances(){return new ArrayList<Door>(entrances);}
-	
-	@Override
-	public char getKey(){return this.key;}
-
 	@Override
 	public boolean canMoveTo(Tile tile) {
 		//Check to see if any of our entrances can reach the tile
@@ -70,6 +86,13 @@ public class Room extends Tile {
 		return false;
 	}
 	
+	//Getters and setters
+	public String getName(){return name;}
+	public List<Door> getEntrances(){return new ArrayList<Door>(entrances);}
+	
+	@Override
+	public char getKey(){return this.key;}
+
 	@Override
 	public boolean setPlayer(Player p){
 		if (players.add(p)){

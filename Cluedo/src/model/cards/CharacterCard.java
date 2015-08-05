@@ -6,6 +6,8 @@ package model.cards;
  * There is little difference between this and the other cards,
  * This is here purely so we're able to specify whether a card
  * is a character or not
+ * 
+ * @author Carl
  *
  */
 public class CharacterCard extends Card {

@@ -4,6 +4,7 @@ package model.cards;
  * An abstract class for representing the card objects held by players,
  * and used to represent the solutions
  *
+ *	@author Carl
  */
 public abstract class Card {
 	private final String value;
@@ -21,6 +22,7 @@ public abstract class Card {
 	}
 	
 	@Override
+	//Generated
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

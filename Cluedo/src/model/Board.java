@@ -149,26 +149,26 @@ public class Board {
 	 * @param sc
 	 * @return
 	 */
-	public static Board parseBoard(String filename){
+	public static Board parseBoard(String filename) {
 		Scanner sc;
-		
+
 		try {
 			sc = new Scanner(new File(filename));
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 			throw new RuntimeException("Could not parse: File not found");
 		}
-		
+
 		int width;
 		int height;
 
 		sc.useDelimiter("[;\r\n]+");
 
-		//Parse the rooms from the file
+		// Parse the rooms from the file
 		Map<Character, Room> rooms = parseRooms(sc);
-		
+
 		Pattern intRegex = Pattern.compile("[0-9]+");
-		
+
 		// Parse the board
 		try {
 			width = Integer.parseInt(sc.next(intRegex));
@@ -177,17 +177,18 @@ public class Board {
 		} catch (RuntimeException e) {
 			// Catch the exception if something goes wrong, and provide a more
 			// useful error
-			throw new RuntimeException("Could not parse: Board dimensions not declared");
+			throw new RuntimeException(
+					"Could not parse: Board dimensions not declared");
 		}
-		
+
 		//
 		Board board = new Board(width, height);
 		board.rooms = rooms;
-		
-		//Parse the tokens from file
+
+		// Parse the tokens from file
 		parseTokens(sc, board);
 		linkTokens(board.board);
-		
+
 		sc.close();
 
 		return board;
@@ -204,7 +205,7 @@ public class Board {
 		String line;
 		int width = b.board.length;
 		int height = width > 0 ? b.board[0].length : 0;
-		
+
 		Tile[][] board = b.board;
 
 		// Maps the tiles to the warps
@@ -303,16 +304,16 @@ public class Board {
 					try {
 						switch (door.getDirection()) {
 						case UP:
-							r = board[i][j+1];
+							r = board[i][j + 1];
 							break;
 						case DOWN:
-							r = board[i][j-1];
+							r = board[i][j - 1];
 							break;
 						case LEFT:
-							r = board[i+1][j];
+							r = board[i + 1][j];
 							break;
 						case RIGHT:
-							r = board[i-1][j];
+							r = board[i - 1][j];
 							break;
 						case WARP:
 							// Check the surrounding tiles for a room tile that
