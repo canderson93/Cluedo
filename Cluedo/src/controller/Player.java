@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.cards.*;
+import model.tiles.Room;
 import model.tiles.Tile;
 
 /**
@@ -16,7 +17,7 @@ public class Player {
 	private List<Card> cards;
 	private List<Card> unseenCards;
 	private boolean playing;
-	private boolean madeSuggestion;
+	private Room lastSuggestion;
 	private Tile tile; //The tile the player is currently standing on
 	
 	public Player(String name, char key, List<Card> allCards){
@@ -25,7 +26,7 @@ public class Player {
 		this.playing = true;
 		cards = new ArrayList<Card>();
 		this.unseenCards = allCards;
-		this.madeSuggestion = false;
+		this.lastSuggestion = null;
 	}
 	
 	public void addCard(Card c){ 
@@ -48,9 +49,12 @@ public class Player {
 	public boolean isPlaying(){return this.playing; }
 	public List<Card> getUnseenCards(){ return this.unseenCards; }
 	public List<Card> getHand(){ return this.cards; }
+	public Room getLastSuggestion(){ return this.lastSuggestion; }
+	
 	/**
 	 * Setters
 	 */
 	public void setTile(Tile t){ this.tile = t; }
 	public void setPlaying(boolean b) { this.playing = b; }
+	public void setLastSuggestion(Room r){this.lastSuggestion = r;}
 }

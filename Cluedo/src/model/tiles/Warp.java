@@ -1,7 +1,5 @@
 package model.tiles;
 
-import java.util.List;
-
 import model.Board.Direction;
 
 public class Warp extends Door {
