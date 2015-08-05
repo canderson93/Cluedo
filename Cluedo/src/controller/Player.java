@@ -12,25 +12,25 @@ import model.tiles.Tile;
  *
  */
 public class Player {
-	private final String name;
+	private final String character;
 	private final char key;
-	private List<Card> cards;
+	private List<Card> hand;
 	private List<Card> unseenCards; //cards the player hasn't seen, this is updated throughout the game
 	private boolean playing;
 	private Room lastSuggestion;
 	private Tile tile; //The tile the player is currently standing on
 	
 	public Player(String name, char key, List<Card> allCards){
-		this.name = name;
+		this.character = name;
 		this.key = key;
 		this.playing = true;
-		cards = new ArrayList<Card>();
+		hand = new ArrayList<Card>();
 		this.unseenCards = allCards;
 		this.lastSuggestion = null;
 	}
 	
 	public void addCard(Card c){ 
-		this.cards.add(c); 
+		this.hand.add(c); 
 		this.unseenCards.remove(c);
 	}
 	
@@ -41,12 +41,12 @@ public class Player {
 	/**
 	 * Getters
 	 */
-	public String getName(){return this.name; }
+	public String getName(){return this.character; }
 	public char getKey(){ return this.key; }
 	public Tile getTile(){ return this.tile; }
 	public boolean isPlaying(){return this.playing; }
 	public List<Card> getUnseenCards(){ return this.unseenCards; }
-	public List<Card> getHand(){ return this.cards; }
+	public List<Card> getHand(){ return this.hand; }
 	public Room getLastSuggestion(){ return this.lastSuggestion; }
 	
 	/**

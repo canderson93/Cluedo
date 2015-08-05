@@ -83,6 +83,7 @@ public class Room extends Tile {
 	public void removePlayer(Player p){
 		players.remove(p);
 	}
+
 	
 	@Override
 	public int getX(){throw new RuntimeException("Cannot get x position of a Room");}
