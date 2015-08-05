@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  */
 public class Board {
 	private Map<Character, Room> rooms = new HashMap<Character, Room>();
-	private Set<Hall> prawn = new HashSet<Hall>();
+	private Set<Hall> spawn = new HashSet<Hall>();
 	private Tile[][] board;
 
 	// Enum to represent the direction the door is facing
@@ -85,7 +85,7 @@ public class Board {
 	 *            the player to be added
 	 */
 	public void addPlayer(Player p) {
-		for (Hall h : prawn) {
+		for (Hall h : spawn) {
 			if (!h.containsPlayer()) {
 				h.setPlayer(p);
 				p.setTile(h);
@@ -105,8 +105,6 @@ public class Board {
 	 * @return the tile in the given direction, or null if there is none
 	 */
 	private Tile getTile(Tile tile, Direction dir) {
-		// TODO: Fix when two doors are facing the same direction in a room (eg
-		// the Ball Room)
 		if (tile instanceof Room) {
 			// Check whether any of the doors can move in that direction
 			for (Tile t : ((Room) tile).getEntrances()) {
@@ -231,7 +229,7 @@ public class Board {
 						break;
 					case '?': // Spawn Token
 						Hall h = new Hall(j, i);
-						b.prawn.add(h);
+						b.spawn.add(h);
 						board[j][i] = h;
 						break;
 					// Door tokens
