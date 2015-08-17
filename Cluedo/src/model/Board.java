@@ -7,6 +7,8 @@ import model.tiles.Room;
 import model.tiles.Tile;
 import model.tiles.Warp;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ import java.util.regex.Pattern;
  *
  */
 public class Board {
+	public static int tileSize = 20;
+	public static int wallThickness = 2;
+	
 	private Map<Character, Room> rooms = new HashMap<Character, Room>();
 	private Set<Hall> spawn = new HashSet<Hall>();
 	private Tile[][] board;
@@ -92,6 +97,52 @@ public class Board {
 				return;
 			}
 		}
+	}
+	
+	/**
+	 * Draws the board to the specified canvas
+	 * @param g
+	 */
+	public void drawBoard(Graphics g){
+		//Draw the underlying tiles
+		for (int i = 0; i < board.length; i++){
+			for (int j = 0; j < board[0].length; j++){
+				board[i][j].draw(g, i, j);
+			}
+		}
+		
+		//Iterate through again, and draw walls where appropriate
+		g.setColor(Color.BLACK);
+		int avg = wallThickness/2;
+		for (int i = 0; i < board.length; i++){
+			for (int j = 0; j < board[0].length; j++){
+				if (board[i][j] instanceof Hall){ continue; }
+				Tile r = board[i][j];
+				
+				//UP
+				if (j > 0 && !r.canMoveTo(board[i][j-1])){
+					g.fillRect(i*tileSize, j*tileSize-avg, tileSize, wallThickness);
+				}
+				
+				//DOWN
+				if (j < board[0].length-1 && !r.canMoveTo(board[i][j+1])){
+					g.fillRect(i*tileSize, (j+1)*tileSize-avg, tileSize, wallThickness);
+				}
+				
+				//LEFT
+				if (i > 0 && !r.canMoveTo(board[i-1][j])){
+					g.fillRect(i*tileSize-avg, j*tileSize, wallThickness, tileSize);
+				}
+				
+				//RIGHT
+				if (i < board.length-1 && !r.canMoveTo(board[i+1][j])){
+					g.fillRect((i+1)*tileSize-avg, j*tileSize, wallThickness, tileSize);
+				}
+				
+			}
+		}
+		
+		
 	}
 
 	/**
@@ -407,4 +458,7 @@ public class Board {
 		List<Room> roomsList = new ArrayList<Room>(rooms.values());
 		return roomsList;
 	}
+	
+	public int getWidth() { return board.length; }
+	public int getHeight(){ return board.length > 0 ? board[0].length : 0; }
 }

@@ -1,11 +1,17 @@
 package model.tiles;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import model.Board;
+
 /**
  * The tile object used to represent the hallway of the cluedo game
  * @author Carl
  *
  */
 public class Hall extends Tile{
+	public static Color color = Color.WHITE;
 	
 	public Hall(int x, int y){
 		super(' ', x, y);
@@ -18,5 +24,18 @@ public class Hall extends Tile{
 		if (tile instanceof Door){return tile.canMoveTo(this);}
 		
 		return Math.abs(this.x-tile.x) + Math.abs(this.y-tile.y) == 1;
+	}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		int size = Board.tileSize;
+		
+		//Draw the base tile
+		g.setColor(color);
+		g.fillRect(x*size, y*size, size, size);
+		
+		//Draw a tile border
+		g.setColor(Color.LIGHT_GRAY);
+		g.drawRect(x*size, y*size, size, size);
 	}
 }

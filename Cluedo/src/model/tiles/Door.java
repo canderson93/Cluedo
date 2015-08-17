@@ -1,5 +1,7 @@
 package model.tiles;
 
+import java.awt.Graphics;
+
 import controller.Player;
 import model.Board.Direction;
 
@@ -56,4 +58,9 @@ public class Door extends Tile {
 	
 	public Direction getDirection(){return dir;}
 	public Room getRoom(){return room;}
+
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		room.draw(g, x, y);
+	}
 }

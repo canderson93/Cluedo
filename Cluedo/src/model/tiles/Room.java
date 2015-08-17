@@ -1,10 +1,13 @@
 package model.tiles;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import model.Board;
 import model.Weapons;
 import controller.Player;
 
@@ -15,6 +18,8 @@ import controller.Player;
  *
  */
 public class Room extends Tile {
+	public static Color color = Color.GREEN;
+	
 	//The name of the room, and the letter to represent it on the board
 	private final String name;
 	private List<Door> entrances = new ArrayList<Door>();
@@ -76,6 +81,7 @@ public class Room extends Tile {
 	
 	@Override
 	public boolean canMoveTo(Tile tile) {
+		if (tile == this){return true;}
 		//Check to see if any of our entrances can reach the tile
 		for (Door d : entrances){
 			if (d.canMoveTo(tile)){
@@ -84,6 +90,15 @@ public class Room extends Tile {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public void draw(Graphics g, int x, int y) {
+		int size = Board.tileSize;
+		
+		g.setColor(color);
+		if (name.equals("Blank")){g.setColor(Color.BLUE);}
+		g.fillRect(x*size, y*size, size, size);
 	}
 	
 	//Getters and setters

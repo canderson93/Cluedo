@@ -1,5 +1,9 @@
 package model.tiles;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
+import model.Board;
 import model.Board.Direction;
 
 /**
@@ -11,6 +15,8 @@ import model.Board.Direction;
  *
  */
 public class Warp extends Door {
+	public static Color color = Color.BLACK;
+	
 	private Warp target;
 
 	public Warp(char key, int x, int y) {
@@ -39,5 +45,13 @@ public class Warp extends Door {
 
 	public Warp getTarget() {
 		return this.target;
+	}
+	
+	@Override
+	public void draw(Graphics g, int x, int y){
+		int size = Board.tileSize;
+		
+		g.setColor(color);
+		g.fillRect(x*size, y*size, size, size);
 	}
 }

@@ -1,5 +1,7 @@
 package model.tiles;
 
+import java.awt.Graphics;
+
 import controller.Player;
 
 /**
@@ -42,6 +44,12 @@ public abstract class Tile {
 	 * @return
 	 */
 	public abstract boolean canMoveTo(Tile tile);
+	
+	/**
+	 * Draws this tile onto the graphics pane
+	 * @param g
+	 */
+	public abstract void draw(Graphics g, int x, int y);
 	
 	/**
 	 * Checks whether this room contains a player
