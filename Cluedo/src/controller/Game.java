@@ -7,12 +7,15 @@ import java.util.Map;
 import java.util.Random;
 
 import model.Board;
-import model.cards.*;
+import model.Board.Direction;
+import model.Characters;
+import model.Weapons;
+import model.cards.Card;
+import model.cards.CharacterCard;
+import model.cards.RoomCard;
+import model.cards.WeaponCard;
 import model.tiles.Room;
 import model.tiles.Tile;
-import model.Weapons;
-import model.Characters;
-import model.Board.Direction;
 
 /**
  * The main class for controlling game logic

@@ -18,7 +18,8 @@ import controller.Player;
  *
  */
 public class Room extends Tile {
-	public static Color color = Color.GREEN;
+	public static Color color = new Color(240, 240, 210);
+	public static Color blankColor = new Color(70, 190, 200);
 	
 	//The name of the room, and the letter to represent it on the board
 	private final String name;
@@ -97,7 +98,7 @@ public class Room extends Tile {
 		int size = Board.tileSize;
 		
 		g.setColor(color);
-		if (name.equals("Blank")){g.setColor(Color.BLUE);}
+		if (name.equals("Blank")){g.setColor(blankColor);}
 		g.fillRect(x*size, y*size, size, size);
 	}
 	

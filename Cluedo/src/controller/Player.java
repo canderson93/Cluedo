@@ -1,7 +1,11 @@
 package controller;
+import java.awt.Image;
+import java.awt.Graphics;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import view.BoardCanvas;
 import model.cards.*;
 import model.tiles.Room;
 import model.tiles.Tile;
@@ -12,6 +16,8 @@ import model.tiles.Tile;
  *
  */
 public class Player {
+	private final Image img;
+	
 	private final String character;
 	private final char key;
 	private List<Card> hand = new ArrayList<Card>();
@@ -24,6 +30,7 @@ public class Player {
 		this.character = name;
 		this.key = key;
 		this.unseenCards = allCards;
+		this.img = BoardCanvas.loadImage("characters/"+name.toLowerCase()+".png");
 	}
 	
 	/**
@@ -53,6 +60,7 @@ public class Player {
 	public List<Card> getUnseenCards(){ return this.unseenCards; }
 	public List<Card> getHand(){ return this.hand; }
 	public Room getLastSuggestion(){ return this.lastSuggestion; }
+	public Image getImage(){return img;}
 	
 	/*
 	 * Setters

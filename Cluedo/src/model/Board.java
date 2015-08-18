@@ -9,6 +9,7 @@ import model.tiles.Warp;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -108,6 +109,12 @@ public class Board {
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				board[i][j].draw(g, i, j);
+				
+				//If a player is on the tile, draw that instead
+				if (board[i][j].getPlayer() != null){
+					Image img = board[i][j].getPlayer().getImage();
+					g.drawImage(img, i*tileSize, j*tileSize, tileSize, tileSize, null);
+				}
 			}
 		}
 		
@@ -120,22 +127,22 @@ public class Board {
 				Tile r = board[i][j];
 				
 				//UP
-				if (j > 0 && !r.canMoveTo(board[i][j-1])){
+				if (j > 0 && (!r.canMoveTo(board[i][j-1]) || !board[i][j-1].canMoveTo(r))){
 					g.fillRect(i*tileSize, j*tileSize-avg, tileSize, wallThickness);
 				}
 				
 				//DOWN
-				if (j < board[0].length-1 && !r.canMoveTo(board[i][j+1])){
+				if (j < board[0].length-1 && (!r.canMoveTo(board[i][j+1]) || !board[i][j+1].canMoveTo(r))){
 					g.fillRect(i*tileSize, (j+1)*tileSize-avg, tileSize, wallThickness);
 				}
 				
 				//LEFT
-				if (i > 0 && !r.canMoveTo(board[i-1][j])){
+				if (i > 0 && (!r.canMoveTo(board[i-1][j]) || !board[i-1][j].canMoveTo(r))){
 					g.fillRect(i*tileSize-avg, j*tileSize, wallThickness, tileSize);
 				}
 				
 				//RIGHT
-				if (i < board.length-1 && !r.canMoveTo(board[i+1][j])){
+				if (i < board.length-1 && (!r.canMoveTo(board[i+1][j]) || !board[i+1][j].canMoveTo(r))){
 					g.fillRect((i+1)*tileSize-avg, j*tileSize, wallThickness, tileSize);
 				}
 				

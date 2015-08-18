@@ -11,7 +11,8 @@ import model.Board;
  *
  */
 public class Hall extends Tile{
-	public static Color color = Color.WHITE;
+	public static Color color = new Color(255, 255, 60);
+	public static Color lineColor = new Color(240, 240, 0);
 	
 	public Hall(int x, int y){
 		super(' ', x, y);
