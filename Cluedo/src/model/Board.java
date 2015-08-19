@@ -104,12 +104,15 @@ public class Board {
 	 * Draws the board to the specified canvas
 	 * @param g
 	 */
-	public void drawBoard(Graphics g){
+	public void drawBoard(Graphics g, Tile selectedTile){
 		//Draw the underlying tiles
+		
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				board[i][j].draw(g, i, j);
-				
+				if(selectedTile != null && board[i][j] == selectedTile && selectedTile.getKey() != '#' && selectedTile.getKey() != '#'){
+					 drawHighlightedTile(g, i, j);
+				}
 				//If a player is on the tile, draw that instead
 				if (board[i][j].getPlayer() != null){
 					Image img = board[i][j].getPlayer().getImage();
@@ -150,6 +153,11 @@ public class Board {
 		}
 		
 		
+	}
+
+	private void drawHighlightedTile(Graphics g, int i, int j) {	
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(i*tileSize, j*tileSize, this.tileSize, this.tileSize);		
 	}
 
 	/**

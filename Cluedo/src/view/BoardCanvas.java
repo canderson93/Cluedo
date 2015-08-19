@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import model.Board;
+import model.tiles.Tile;
 
 /**
  * This class is the frame responsible for redrawing the board and the players
@@ -22,6 +23,7 @@ import model.Board;
 @SuppressWarnings("serial")
 public class BoardCanvas extends JPanel implements MouseMotionListener, MouseListener{
 	private Board board;
+	private Tile highlightedTile;
 	
 	public BoardCanvas(Board b){
 		super();
@@ -35,7 +37,7 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	@Override
 	public void paintComponent(Graphics g){
 		Board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
-		board.drawBoard(g);
+		board.drawBoard(g, this.highlightedTile);
 	}
 	
 	/**
@@ -67,17 +69,15 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		int mouseX = e.getX() / board.tileSize;
+		int mouseY = e.getY() / board.tileSize;
+		this.highlightedTile = board.getTile(mouseX, mouseY);
+		repaint();		
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// user tying to move player 
-		//double mouseX = (int) /tileSize to get coordinate of tile
-		double mouseX = e.getX() / board.tileSize;
-		double mouseY = e.getY() / board.tileSize;
-		selectedTile = board.getTile(mouseX, mouseY);
+	public void mouseClicked(MouseEvent e) { 
+
 	}
 
 	@Override
