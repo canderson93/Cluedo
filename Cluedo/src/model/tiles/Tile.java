@@ -96,11 +96,13 @@ public abstract class Tile {
 	 * @return
 	 */
 	public double getDistance(Tile other){
+		if (this == other){return 0;}
+		
 		if (other instanceof Room){
 			double min = Integer.MAX_VALUE;
 			
 			for (Door d : ((Room)other).getEntrances()){
-				min = Math.min(min, d.getDistance(other));
+				min = Math.min(min, this.getDistance(d));
 			}
 			
 			return min;

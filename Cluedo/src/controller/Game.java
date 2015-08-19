@@ -198,12 +198,14 @@ public class Game {
 	 */
 	public boolean move(Tile tile) {
 		
-		List<Tile> path = board.findPath();
+		List<Tile> path = board.findPath(current.getTile(), tile);
 		if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
 		for(int i = 0; i < path.size(); i++){
 			if(i < path.size() - 1){ board.move(this.current, path.get(i), false); }
 			else { board.move(this.current, path.get(i), true); } //warn move method that this is the destination tile
 		}
+		
+		return true;
 	}
 
 	/**

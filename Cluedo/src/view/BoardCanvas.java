@@ -74,8 +74,8 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		int mouseX = e.getX() / board.tileSize;
-		int mouseY = e.getY() / board.tileSize;
+		int mouseX = e.getX() / Board.tileSize;
+		int mouseY = e.getY() / Board.tileSize;
 		this.hoverTile = board.getTile(mouseX, mouseY);
 		repaint();		
 	}

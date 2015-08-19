@@ -27,7 +27,7 @@ public class CluedoTests {
 		Tile t = g.getCurrent().getTile();
 		g.setRoll(0);
 		
-		g.move(Direction.UP);
+		g.move(g.getBoard().getTile(t, Direction.UP));
 		
 		assertTrue(t == g.getCurrent().getTile());
 	}

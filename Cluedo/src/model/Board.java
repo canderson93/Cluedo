@@ -80,7 +80,7 @@ public class Board {
 		if (fromTile instanceof Room){
 			for (Door d : ((Room)fromTile).getEntrances()){
 				List<Tile> current = new ArrayList<Tile>();
-				searchBoard(null, d, toTile, current, 0);
+				searchBoard(d, toTile, current, new HashSet<Tile>());
 				
 				if (current.size() < path.size()){
 					path = current;
@@ -88,7 +88,7 @@ public class Board {
 			}
 		} else {
 			//Otherwise, search the board normally
-			searchBoard(null, fromTile, toTile, path, 0);
+			searchBoard(fromTile, toTile, path, new HashSet<Tile>());
 		}
 		
 		//Path comes out backwards, so we have to reverse it
@@ -96,6 +96,7 @@ public class Board {
 			ret.add(path.get(i));
 		}
 		
+		System.out.println("Path Size: "+path.size());
 		return ret;
 	}
 	
@@ -108,10 +109,16 @@ public class Board {
 	 * @param dist
 	 * @return
 	 */
-	private boolean searchBoard(Tile parent, Tile current, Tile toTile, List<Tile> path, int dist){
-		if (toTile == current || (current instanceof Door && ((Door)current).getRoom() == toTile)){
-			path.add(current);
+	private boolean searchBoard(Tile current, Tile toTile, List<Tile> path, Set<Tile> visited){
+		if (toTile == current || (current instanceof Door && (((Door)current).getRoom() == toTile || (toTile instanceof Door && ((Door)current).getRoom() == ((Door)toTile).getRoom())))){
 			return true;
+		}
+		
+		visited.add(current);
+		
+		//If we go through a door, but it isn't the end goal, stop
+		if (current instanceof Door){
+			return false;
 		}
 		
 		List<Tile> surrounding = new ArrayList<Tile>();
@@ -120,7 +127,7 @@ public class Board {
 		for (Direction d : Direction.values()){
 			Tile t = getTile(current, d);
 			
-			if (t != parent && t != null && current.canMoveTo(t) && t.getPlayer() == null){
+			if (t != null && !visited.contains(t) && current.canMoveTo(t) && t.getPlayer() == null){
 				surrounding.add(t);
 			}
 		}
@@ -131,14 +138,15 @@ public class Board {
 			double bestVal = Double.MAX_VALUE;
 			
 			for (Tile t : surrounding){
-				double val = t.getDistance(toTile)+dist;
+				double val = t.getDistance(toTile);
 				if (val < bestVal){
 					best = t;
 					bestVal = val;
 				}
 			}
 			
-			if (searchBoard(current, best, toTile, path, dist+1)){
+			if (searchBoard(best, toTile, path, visited)){
+				path.add(best);
 				return true;
 			}
 			
@@ -260,7 +268,7 @@ public class Board {
 	 *            the direction to move
 	 * @return the tile in the given direction, or null if there is none
 	 */
-	private Tile getTile(Tile tile, Direction dir) {
+	public Tile getTile(Tile tile, Direction dir) {
 		if (tile instanceof Room) {
 			// Check whether any of the doors can move in that direction
 			for (Tile t : ((Room) tile).getEntrances()) {
