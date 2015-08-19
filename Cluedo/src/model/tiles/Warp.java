@@ -48,6 +48,15 @@ public class Warp extends Door {
 	}
 	
 	@Override
+	public double getDistance(Tile other){
+		if (other == target){
+			return 1;
+		}
+		
+		return super.getDistance(other);
+	}
+	
+	@Override
 	public void draw(Graphics g, int x, int y){
 		int size = Board.tileSize;
 		

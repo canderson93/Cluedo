@@ -85,6 +85,82 @@ public class Board {
 
 		return true;
 	}
+	
+	public List<Tile> findPath(Tile fromTile, Tile toTile){
+		List<Tile> path = new ArrayList<Tile>();
+		List<Tile> ret = new ArrayList<Tile>();
+		
+		//If we're moving from a room, try all the entrances
+		if (fromTile instanceof Room){
+			for (Door d : ((Room)fromTile).getEntrances()){
+				List<Tile> current = new ArrayList<Tile>();
+				searchBoard(null, d, toTile, current, 0);
+				
+				if (current.size() < path.size()){
+					path = current;
+				}
+			}
+		} else {
+			//Otherwise, search the board normally
+			searchBoard(null, fromTile, toTile, path, 0);
+		}
+		
+		//Path comes out backwards, so we have to reverse it
+		for (int i = path.size(); i < 0; i--){
+			ret.add(path.get(i));
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Recursively search the board for the best route between two tiles
+	 * @param parent
+	 * @param current
+	 * @param toTile
+	 * @param path
+	 * @param dist
+	 * @return
+	 */
+	private boolean searchBoard(Tile parent, Tile current, Tile toTile, List<Tile> path, int dist){
+		if (toTile == current || (current instanceof Door && ((Door)current).getRoom() == toTile)){
+			path.add(current);
+			return true;
+		}
+		
+		List<Tile> surrounding = new ArrayList<Tile>();
+		
+		//Get the surrounding tiles
+		for (Direction d : Direction.values()){
+			Tile t = getTile(current, d);
+			
+			if (t != parent && t != null && current.canMoveTo(t) && t.getPlayer() == null){
+				surrounding.add(t);
+			}
+		}
+		
+		//Find the best option in the surrounding tiles, and start by searching that
+		while (!surrounding.isEmpty()){
+			Tile best = null;
+			double bestVal = Double.MAX_VALUE;
+			
+			for (Tile t : surrounding){
+				double val = t.getDistance(toTile)+dist;
+				if (val < bestVal){
+					best = t;
+					bestVal = val;
+				}
+			}
+			
+			if (searchBoard(current, best, toTile, path, dist+1)){
+				return true;
+			}
+			
+			surrounding.remove(best);
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Adds a player to a king prawn point

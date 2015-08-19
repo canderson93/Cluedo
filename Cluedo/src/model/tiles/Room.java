@@ -149,6 +149,17 @@ public class Room extends Tile {
 	}
 	
 	@Override
+	public double getDistance(Tile other){
+		double min = Double.MAX_VALUE;
+		
+		for (Door d : entrances){
+			return Math.min(min, d.getDistance(other));
+		}
+		
+		return min;
+	}
+	
+	@Override
 	public int getX(){return minX;}
 	
 	@Override

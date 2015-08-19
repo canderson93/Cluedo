@@ -82,6 +82,25 @@ public abstract class Tile {
 		}
 	}
 	
+	/**
+	 * Returns the euclidean distance between two tiles
+	 * @param other
+	 * @return
+	 */
+	public double getDistance(Tile other){
+		if (other instanceof Room){
+			double min = Integer.MAX_VALUE;
+			
+			for (Door d : ((Room)other).getEntrances()){
+				min = Math.min(min, d.getDistance(other));
+			}
+			
+			return min;
+		}
+		
+		return Math.sqrt(Math.pow(this.x-other.x, 2)+Math.pow(this.y-other.y, 2));
+	}
+	
 	//getters and setters
 	public int getX(){return x;}
 	public int getY(){return y;}
