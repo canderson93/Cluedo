@@ -106,14 +106,16 @@ public class Board {
 	 * Draws the board to the specified canvas
 	 * @param g
 	 */
-	public void drawBoard(Graphics g, Tile selectedTile){
-		//Draw the underlying tiles
-		
+	public void drawBoard(Graphics g, Tile hoverTile, Tile selectedTile){
+		//Draw the underlying tiles	
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				board[i][j].draw(g, i, j);
-				if(selectedTile != null && board[i][j] == selectedTile && selectedTile.getKey() != '#' && selectedTile.getKey() != '#'){
+				if(hoverTile != null && board[i][j] == hoverTile && hoverTile.getKey() != '#'){
 					 drawHighlightedTile(g, i, j);
+				}
+				if(selectedTile != null && board[i][j] == selectedTile && selectedTile.getKey() != '#'){
+					 drawSelectedTile(g, i, j);
 				}
 				//If a player is on the tile, draw that instead
 				if (board[i][j].getPlayer() != null){
@@ -149,12 +151,9 @@ public class Board {
 				//RIGHT
 				if (i < board.length-1 && (!r.canMoveTo(board[i+1][j]) || !board[i+1][j].canMoveTo(r))){
 					g.fillRect((i+1)*tileSize-avg, j*tileSize, wallThickness, tileSize);
-				}
-				
+				}	
 			}
-		}
-		
-		
+		}	
 	}
 	
 	/**
@@ -179,7 +178,12 @@ public class Board {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(i*tileSize, j*tileSize, this.tileSize, this.tileSize);		
 	}
-
+	
+	private void drawSelectedTile(Graphics g, int i, int j) {
+		g.setColor(Color.magenta);
+		g.fillRect(i*tileSize, j*tileSize, this.tileSize, this.tileSize);
+	}
+	
 	/**
 	 * Gets the tile in the direction of the provided tile, or null if there is
 	 * no eligible tile in that direction.

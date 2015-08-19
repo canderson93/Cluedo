@@ -23,7 +23,8 @@ import model.tiles.Tile;
 @SuppressWarnings("serial")
 public class BoardCanvas extends JPanel implements MouseMotionListener, MouseListener{
 	private Board board;
-	private Tile highlightedTile;
+	private Tile hoverTile;
+	private Tile selectedTile;
 	
 	public BoardCanvas(Board b){
 		super();
@@ -37,7 +38,7 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	@Override
 	public void paintComponent(Graphics g){
 		Board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
-		board.drawBoard(g, this.highlightedTile);
+		board.drawBoard(g, this.hoverTile, this.selectedTile);
 		board.drawRoomDetails(g);
 	}
 	
@@ -72,13 +73,17 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	public void mouseMoved(MouseEvent e) {
 		int mouseX = e.getX() / board.tileSize;
 		int mouseY = e.getY() / board.tileSize;
-		this.highlightedTile = board.getTile(mouseX, mouseY);
+		this.hoverTile = board.getTile(mouseX, mouseY);
 		repaint();		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) { 
-
+		int mouseX = e.getX() / board.tileSize;
+		int mouseY = e.getY() / board.tileSize;
+		this.selectedTile = board.getTile(mouseX, mouseY);
+		repaint();	
+		//this.selectedTile = null;
 	}
 
 	@Override
