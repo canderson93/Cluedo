@@ -107,12 +107,14 @@ public class Board {
 	 * @param g
 	 */
 	public void drawBoard(Graphics g, Tile selectedTile){
-		//Draw the underlying tiles
+		if(selectedTile != null && selectedTile.getKey() == '#'){selectedTile = null;} //Ignore the blank room as the selected tile
 		
+		//Draw the underlying tiles
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				board[i][j].draw(g, i, j);
-				if(selectedTile != null && board[i][j] == selectedTile && selectedTile.getKey() != '#' && selectedTile.getKey() != '#'){
+				if(selectedTile != null && board[i][j] == selectedTile || 
+						(board[i][j] instanceof Door && ((Door)board[i][j]).getRoom() == selectedTile)){
 					 drawHighlightedTile(g, i, j);
 				}
 				//If a player is on the tile, draw that instead
