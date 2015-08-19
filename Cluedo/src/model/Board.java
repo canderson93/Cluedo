@@ -106,12 +106,16 @@ public class Board {
 	 * Draws the board to the specified canvas
 	 * @param g
 	 */
+
 	public void drawBoard(Graphics g, Tile hoverTile, Tile selectedTile){
-		//Draw the underlying tiles	
+		if(selectedTile != null && selectedTile.getKey() == '#'){selectedTile = null;} //Ignore the blank room as the selected tile
+		
+		//Draw the underlying tiles
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				board[i][j].draw(g, i, j);
-				if(hoverTile != null && board[i][j] == hoverTile && hoverTile.getKey() != '#'){
+				if(hoverTile != null && board[i][j] == hoverTile || 
+						(board[i][j] instanceof Door && ((Door)board[i][j]).getRoom() == hoverTile)){
 					 drawHighlightedTile(g, i, j);
 				}
 				if(selectedTile != null && board[i][j] == selectedTile && selectedTile.getKey() != '#'){
@@ -165,18 +169,18 @@ public class Board {
 		FontMetrics fm = g.getFontMetrics();
 		
 		for (Room r : rooms.values()){
+			if (r.getKey() == '#'){continue;}
 			Rectangle2D bounds = fm.getStringBounds(r.getName(), g);
 
-			int drawX = (int)((r.getX() + r.getWidth()/2)*tileSize - bounds.getWidth()/2);
-			int drawY = (int)((r.getY() + r.getHeight()/2)*tileSize - bounds.getHeight()/2);
-			
+			int drawX = (int)(((r.getX() + (r.getWidth()/2))*tileSize) - bounds.getWidth()/2);
+			int drawY = (int)((r.getY() + (r.getHeight()/2))*tileSize);
 			g.drawString(r.getName(), drawX, drawY);
 		}
 	}
 
 	private void drawHighlightedTile(Graphics g, int i, int j) {	
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(i*tileSize, j*tileSize, this.tileSize, this.tileSize);		
+		g.fillRect(i*tileSize, j*tileSize, tileSize, tileSize);		
 	}
 	
 	private void drawSelectedTile(Graphics g, int i, int j) {
