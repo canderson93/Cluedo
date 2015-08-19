@@ -166,18 +166,18 @@ public class Board {
 		FontMetrics fm = g.getFontMetrics();
 		
 		for (Room r : rooms.values()){
+			if (r.getKey() == '#'){continue;}
 			Rectangle2D bounds = fm.getStringBounds(r.getName(), g);
 
-			int drawX = (int)((r.getX() + r.getWidth()/2)*tileSize - bounds.getWidth()/2);
-			int drawY = (int)((r.getY() + r.getHeight()/2)*tileSize - bounds.getHeight()/2);
-			
+			int drawX = (int)(((r.getX() + (r.getWidth()/2))*tileSize) - bounds.getWidth()/2);
+			int drawY = (int)((r.getY() + (r.getHeight()/2))*tileSize);
 			g.drawString(r.getName(), drawX, drawY);
 		}
 	}
 
 	private void drawHighlightedTile(Graphics g, int i, int j) {	
 		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect(i*tileSize, j*tileSize, this.tileSize, this.tileSize);		
+		g.fillRect(i*tileSize, j*tileSize, tileSize, tileSize);		
 	}
 
 	/**

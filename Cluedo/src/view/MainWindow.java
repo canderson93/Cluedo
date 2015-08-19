@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -132,7 +133,9 @@ public class MainWindow extends JFrame {
 		
 		JPanel outerPanel = new JPanel(new GridBagLayout());
 		JPanel rightPane = new JPanel();
-				
+		
+		rightPane.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
+								
 		//Set constraints to consume all available space
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -140,10 +143,15 @@ public class MainWindow extends JFrame {
 		c.weighty = 1;
 		
 		//TODO: Make right hand side of this panel
-		divider = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, outerPanel, new JPanel());
+		divider = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, outerPanel, rightPane);
 		divider.setResizeWeight(0.5);
 		
 		outerPanel.add(canvas, c);
+		
+		GridBagConstraints divConstraints = new GridBagConstraints();
+		divConstraints.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.weighty = 1;
 		
 		this.add(divider, c);
 		this.pack();

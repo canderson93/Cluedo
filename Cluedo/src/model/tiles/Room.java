@@ -28,8 +28,8 @@ public class Room extends Tile {
 	private Set<Weapons> weapons = new HashSet<Weapons>();
 
 	//Room bounding box
-	int minX = 0;
-	int minY = 0;
+	int minX = -1;
+	int minY = -1;
 	int maxX = 0;
 	int maxY = 0;
 	
@@ -92,14 +92,14 @@ public class Room extends Tile {
 	 */
 	public void addLocation(int x, int y){
 		//Update the bounding box variables
-		if (x < this.minX){
-			this.minY = x;
+		if (x < this.minX || this.minX == -1){
+			this.minX = x;
 		} else if (x > this.maxX){
 			this.maxX = x;
 		}
 		
-		if (y < this.minY){
-			this.minX = y;
+		if (y < this.minY || this.minY == -1) {
+			this.minY = y;
 		} else if (y > this.maxY){
 			this.maxY = y;
 		}
@@ -154,6 +154,6 @@ public class Room extends Tile {
 	@Override
 	public int getY(){return minY;}
 	
-	public int getWidth(){return maxX-minX;}
-	public int getHeight(){return maxY-minY;}
+	public int getWidth(){return maxX-minX+1;}
+	public int getHeight(){return maxY-minY+1;}
 }

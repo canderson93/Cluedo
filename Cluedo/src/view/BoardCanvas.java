@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import model.Board;
 import model.tiles.Tile;
@@ -37,6 +38,7 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	@Override
 	public void paintComponent(Graphics g){
 		Board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
+			
 		board.drawBoard(g, this.highlightedTile);
 		board.drawRoomDetails(g);
 	}
