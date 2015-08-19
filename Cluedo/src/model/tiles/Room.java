@@ -27,6 +27,11 @@ public class Room extends Tile {
 	private Set<Player> players = new HashSet<Player>(); //The players currently inside this room
 	private Set<Weapons> weapons = new HashSet<Weapons>();
 
+	//Room bounding box
+	int minX = 0;
+	int minY = 0;
+	int maxX = 0;
+	int maxY = 0;
 	
 	public Room(String name, char key){
 		super(key, -1, -1); //don't have x and y positions for this
@@ -80,6 +85,26 @@ public class Room extends Tile {
 		return weapons.contains(wep);
 	}
 	
+	/**
+	 * Adds a coordinate as a room location
+	 * @param x
+	 * @param y
+	 */
+	public void addLocation(int x, int y){
+		//Update the bounding box variables
+		if (x < this.minX){
+			this.minY = x;
+		} else if (x > this.maxX){
+			this.maxX = x;
+		}
+		
+		if (y < this.minY){
+			this.minX = y;
+		} else if (y > this.maxY){
+			this.maxY = y;
+		}
+	}
+	
 	@Override
 	public boolean canMoveTo(Tile tile) {
 		if (tile == this){return true;}
@@ -124,8 +149,11 @@ public class Room extends Tile {
 	}
 	
 	@Override
-	public int getX(){throw new RuntimeException("Cannot get x position of a Room");}
+	public int getX(){return minX;}
 	
 	@Override
-	public int getY(){throw new RuntimeException("Cannot get y position of a Room");}
+	public int getY(){return minY;}
+	
+	public int getWidth(){return maxX-minX;}
+	public int getHeight(){return maxY-minY;}
 }

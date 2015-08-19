@@ -36,6 +36,7 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	public void paintComponent(Graphics g){
 		Board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
 		board.drawBoard(g);
+		board.drawRoomDetials(g);
 	}
 	
 	/**
