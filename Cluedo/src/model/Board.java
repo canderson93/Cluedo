@@ -8,8 +8,10 @@ import model.tiles.Tile;
 import model.tiles.Warp;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -154,6 +156,24 @@ public class Board {
 		
 		
 	}
+	
+	/**
+	 * Draws the details surrounding the room, such as names,
+	 * and the current players inside it
+	 * @param g
+	 */
+	public void drawRoomDetails(Graphics g){
+		FontMetrics fm = g.getFontMetrics();
+		
+		for (Room r : rooms.values()){
+			Rectangle2D bounds = fm.getStringBounds(r.getName(), g);
+
+			int drawX = (int)((r.getX() + r.getWidth()/2)*tileSize - bounds.getWidth()/2);
+			int drawY = (int)((r.getY() + r.getHeight()/2)*tileSize - bounds.getHeight()/2);
+			
+			g.drawString(r.getName(), drawX, drawY);
+		}
+	}
 
 	private void drawHighlightedTile(Graphics g, int i, int j) {	
 		g.setColor(Color.LIGHT_GRAY);
@@ -288,6 +308,7 @@ public class Board {
 				char token = line.charAt(j);
 				if (b.rooms.containsKey(token)) {
 					board[j][i] = b.rooms.get(token);
+					((Room)board[j][i]).addLocation(j, i);
 				} else {
 					// Parse the default tokens
 					switch (token) {
