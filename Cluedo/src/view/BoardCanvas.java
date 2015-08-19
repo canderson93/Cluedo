@@ -3,6 +3,7 @@ package view;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -29,6 +30,7 @@ public class BoardCanvas extends JPanel {
 	
 	@Override
 	public void paintComponent(Graphics g){
+		Board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
 		board.drawBoard(g);
 	}
 	
