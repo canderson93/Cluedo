@@ -468,4 +468,11 @@ public class Board {
 	
 	public int getWidth() { return board.length; }
 	public int getHeight(){ return board.length > 0 ? board[0].length : 0; }
+	public Tile getTile(int x, int y){
+		if (x >= 0 && x < getWidth() && y >= 0 && y < getHeight()){
+			return board[x][y];
+		}
+		
+		return null;
+	}
 }
