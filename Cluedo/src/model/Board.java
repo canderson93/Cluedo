@@ -108,8 +108,8 @@ public class Board {
 	 */
 
 	public void drawBoard(Graphics g, Tile hoverTile, Tile selectedTile){
-		if(selectedTile != null && selectedTile.getKey() == '#'){selectedTile = null;} //Ignore the blank room as the selected tile
-		
+		if(hoverTile != null && hoverTile.getKey() == '#'){hoverTile = null;} //Ignore the blank room as the selected tile
+		if(selectedTile != null && selectedTile.getKey() == '#'){selectedTile = null;}
 		//Draw the underlying tiles
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){

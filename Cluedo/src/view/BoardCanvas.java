@@ -80,23 +80,21 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 
 	@Override
 	public void mouseClicked(MouseEvent e) { 
-		int mouseX = e.getX() / board.tileSize;
-		int mouseY = e.getY() / board.tileSize;
-		this.selectedTile = board.getTile(mouseX, mouseY);
-		repaint();	
-		//this.selectedTile = null;
+			
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		int mouseX = e.getX() / board.tileSize;
+		int mouseY = e.getY() / board.tileSize;
+		this.selectedTile = board.getTile(mouseX, mouseY);
+		repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		this.selectedTile = null;
+		repaint();
 	}
 
 	@Override
