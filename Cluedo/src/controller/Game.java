@@ -38,7 +38,6 @@ public class Game {
 	List<RoomCard> rooms = new ArrayList<RoomCard>();
 
 	int roll;
-	int rollCount;
 	Player current;
 
 	public Game(String filename, int numPlayers) {
@@ -160,7 +159,6 @@ public class Game {
 	public void nextRound() {
 
 		this.roll = new Random().nextInt(10) + 2;
-		this.rollCount = roll;
 		this.current = nextPlayer();
 	}
 
@@ -198,25 +196,14 @@ public class Game {
 	 * @param direction
 	 * @return String
 	 */
-	public String move(Direction d) {
-
-		if (this.rollCount == 0) {
-			return "You have no more rolls. Type end to end your turn.";
-		}
+	public boolean move(Tile tile) {
 		
-		//try perform the move
-		if (!this.board.move(this.current, d)) {
-			return "Can't go that way";
+		List<Tile> path = board.findPath();
+		if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
+		for(int i = 0; i < path.size(); i++){
+			if(i < path.size() - 1){ board.move(this.current, path.get(i), false); }
+			else { board.move(this.current, path.get(i), true); } //warn move method that this is the destination tile
 		}
-		
-		// check whether the player entered a room
-		if (this.current.getTile() instanceof Room) {
-			this.rollCount = 0;
-		} else {
-			this.rollCount--;
-		}
-
-		return "you have " + rollCount + " rolls left";
 	}
 
 	/**
@@ -347,11 +334,7 @@ public class Game {
 	/*
 	 * Setters
 	 */
-	public void setRoll(int i) {
-		this.roll = i;
-		this.rollCount = i;
-	}
-
+	public void setRoll(int i) { this.roll = i; }
 	public void setSolution(List<Card> cards) {this.solution = cards;}
 	public void setCurrent(Player p) {this.current = p;}
 }

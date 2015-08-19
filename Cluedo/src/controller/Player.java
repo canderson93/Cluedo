@@ -17,7 +17,6 @@ import model.tiles.Tile;
  */
 public class Player {
 	private final Image img;
-	
 	private final String character;
 	private final char key;
 	private List<Card> hand = new ArrayList<Card>();

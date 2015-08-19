@@ -1,6 +1,8 @@
 package model.tiles;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 
 import controller.Player;
 
@@ -65,8 +67,14 @@ public abstract class Tile {
 	 * @return whether setting the player was successful
 	 */
 	public boolean setPlayer(Player p){
-		if (player != null){return false;}
-		
+		if (this.player != null){return false;}
+		this.player = p;
+		p.setTile(this);
+		return true;
+	}
+	
+	public boolean setPlayer(Player p, Image img, boolean destination){
+		if (this.player != null){return false;}
 		this.player = p;
 		p.setTile(this);
 		return true;

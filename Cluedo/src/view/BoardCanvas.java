@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import controller.Game;
 import model.Board;
 import model.tiles.Tile;
 
@@ -26,14 +27,15 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	private Board board;
 	private Tile hoverTile;
 	private Tile selectedTile;
+	private Game game;
 	
-	public BoardCanvas(Board b){
+	public BoardCanvas(Game game){
 		super();
+		this.game = game;
+		this.board = game.getBoard();
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
-		this.board = b;
-		
-		this.setPreferredSize(new Dimension(b.getWidth()*Board.tileSize, b.getHeight()*Board.tileSize));
+		this.setPreferredSize(new Dimension(board.getWidth()*Board.tileSize, board.getHeight()*Board.tileSize));
 	}
 	
 	@Override
@@ -88,6 +90,7 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 		int mouseX = e.getX() / board.tileSize;
 		int mouseY = e.getY() / board.tileSize;
 		this.selectedTile = board.getTile(mouseX, mouseY);
+		game.move(selectedTile);
 		repaint();
 	}
 

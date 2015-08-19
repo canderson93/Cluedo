@@ -62,27 +62,13 @@ public class Board {
 	 *            The direction to move
 	 * @return whether the move was successful
 	 */
-	public boolean move(Player player, Direction direction) {
-		// Get the target tiles
+	public boolean move(Player player, Tile tile, boolean finalTile) {
+		//TODO: verify that there isn't another player on the tile if not allowed
+		
 		Tile fromTile = player.getTile();
-		Tile toTile = getTile(fromTile, direction);
-
-		// check the move direction is valid
-		if (toTile == null) {
-			return false;
-		}
-		if (!fromTile.canMoveTo(toTile)) {
-			return false;
-		}
-
-		// Try set the new tile to the player
-		if (!toTile.setPlayer(player)) {
-			return false;
-		}
-
-		// If everythings okay, remove the player the old tile
+		//if the player is reaching their destination then make sure they are viewed as right up
+		tile.setPlayer(player, player.getImage(), finalTile);
 		fromTile.removePlayer(player);
-
 		return true;
 	}
 	

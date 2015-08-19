@@ -129,7 +129,7 @@ public class MainWindow extends JFrame {
 		}
 		
 		this.game = new Game(filename, players);
-		this.canvas = new BoardCanvas(game.getBoard());
+		this.canvas = new BoardCanvas(game);
 		
 		JPanel outerPanel = new JPanel(new GridBagLayout());
 		JPanel rightPane = new JPanel();
