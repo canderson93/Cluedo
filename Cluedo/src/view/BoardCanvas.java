@@ -35,12 +35,12 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 		this.board = game.getBoard();
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
-		this.setPreferredSize(new Dimension(board.getWidth()*Board.tileSize, board.getHeight()*Board.tileSize));
+		this.setPreferredSize(new Dimension(board.getWidth()*board.tileSize, board.getHeight()*board.tileSize));
 	}
 	
 	@Override
 	public void paintComponent(Graphics g){
-		Board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
+		board.tileSize = Math.min(this.getWidth()/board.getWidth(), this.getHeight()/board.getHeight());
 		board.drawBoard(g, this.hoverTile, this.selectedTile);
 		board.drawRoomDetails(g);
 	}
@@ -69,13 +69,12 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		int mouseX = e.getX() / Board.tileSize;
-		int mouseY = e.getY() / Board.tileSize;
+		int mouseX = e.getX() / board.tileSize;
+		int mouseY = e.getY() / board.tileSize;
 		this.hoverTile = board.getTile(mouseX, mouseY);
 		repaint();		
 	}
@@ -90,7 +89,7 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 		int mouseX = e.getX() / board.tileSize;
 		int mouseY = e.getY() / board.tileSize;
 		this.selectedTile = board.getTile(mouseX, mouseY);
-		game.move(selectedTile);
+		game.move(selectedTile, this);
 		repaint();
 	}
 

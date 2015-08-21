@@ -30,8 +30,8 @@ import java.util.regex.Pattern;
  *
  */
 public class Board {
-	public static int tileSize = 20;
-	public static int wallThickness = 2;
+	public int tileSize = 20;
+	public int wallThickness = 2;
 	
 	private Map<Character, Room> rooms = new HashMap<Character, Room>();
 	private Set<Hall> spawn = new HashSet<Hall>();
@@ -67,93 +67,19 @@ public class Board {
 		
 		Tile fromTile = player.getTile();
 		//if the player is reaching their destination then make sure they are viewed as right up
-		tile.setPlayer(player, player.getImage(), finalTile);
+		tile.setPlayer(player);
 		fromTile.removePlayer(player);
 		return true;
 	}
 	
-	public List<Tile> findPath(Tile fromTile, Tile toTile){
-		List<Tile> path = new ArrayList<Tile>();
-		List<Tile> ret = new ArrayList<Tile>();
-		
-		//If we're moving from a room, try all the entrances
-		if (fromTile instanceof Room){
-			for (Door d : ((Room)fromTile).getEntrances()){
-				List<Tile> current = new ArrayList<Tile>();
-				searchBoard(d, toTile, current, new HashSet<Tile>());
-				
-				if (current.size() < path.size()){
-					path = current;
-				}
-			}
-		} else {
-			//Otherwise, search the board normally
-			searchBoard(fromTile, toTile, path, new HashSet<Tile>());
-		}
-		
-		//Path comes out backwards, so we have to reverse it
-		for (int i = path.size(); i < 0; i--){
-			ret.add(path.get(i));
-		}
-		
-		System.out.println("Path Size: "+path.size());
-		return ret;
-	}
-	
 	/**
-	 * Recursively search the board for the best route between two tiles
-	 * @param parent
-	 * @param current
+	 * Finds a path between two tiles
+	 * @param fromTile
 	 * @param toTile
-	 * @param path
-	 * @param dist
 	 * @return
 	 */
-	private boolean searchBoard(Tile current, Tile toTile, List<Tile> path, Set<Tile> visited){
-		if (toTile == current || (current instanceof Door && (((Door)current).getRoom() == toTile || (toTile instanceof Door && ((Door)current).getRoom() == ((Door)toTile).getRoom())))){
-			return true;
-		}
-		
-		visited.add(current);
-		
-		//If we go through a door, but it isn't the end goal, stop
-		if (current instanceof Door){
-			return false;
-		}
-		
-		List<Tile> surrounding = new ArrayList<Tile>();
-		
-		//Get the surrounding tiles
-		for (Direction d : Direction.values()){
-			Tile t = getTile(current, d);
-			
-			if (t != null && !visited.contains(t) && current.canMoveTo(t) && t.getPlayer() == null){
-				surrounding.add(t);
-			}
-		}
-		
-		//Find the best option in the surrounding tiles, and start by searching that
-		while (!surrounding.isEmpty()){
-			Tile best = null;
-			double bestVal = Double.MAX_VALUE;
-			
-			for (Tile t : surrounding){
-				double val = t.getDistance(toTile);
-				if (val < bestVal){
-					best = t;
-					bestVal = val;
-				}
-			}
-			
-			if (searchBoard(best, toTile, path, visited)){
-				path.add(best);
-				return true;
-			}
-			
-			surrounding.remove(best);
-		}
-		
-		return false;
+	public List<Tile> findPath(Tile fromTile, Tile toTile){
+		return PathFinder.findPath(this, fromTile, toTile);
 	}
 
 	/**
@@ -183,7 +109,7 @@ public class Board {
 		//Draw the underlying tiles
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
-				board[i][j].draw(g, i, j);
+				board[i][j].draw(g, i, j, tileSize);
 				if(hoverTile != null && board[i][j] == hoverTile || 
 						(board[i][j] instanceof Door && ((Door)board[i][j]).getRoom() == hoverTile)){
 					 drawHighlightedTile(g, i, j);
@@ -241,10 +167,19 @@ public class Board {
 		for (Room r : rooms.values()){
 			if (r.getKey() == '#'){continue;}
 			Rectangle2D bounds = fm.getStringBounds(r.getName(), g);
+			int midX = (int)(r.getX() + r.getWidth()/2)*tileSize;
+			int midY = (int)(r.getY() + r.getHeight()/2)*tileSize;
 
-			int drawX = (int)(((r.getX() + (r.getWidth()/2))*tileSize) - bounds.getWidth()/2);
-			int drawY = (int)((r.getY() + (r.getHeight()/2))*tileSize);
-			g.drawString(r.getName(), drawX, drawY);
+			//Draw the Room name
+			g.drawString(r.getName(), (int)(midX-bounds.getWidth()/2), midY);
+			
+			//Draw the players standing in the room
+			int offset = midX-(tileSize*r.getPlayers().size()/2);
+			for (Player p : r.getPlayers()){
+				Image img = p.getImage();
+				g.drawImage(img, offset, midY, tileSize, tileSize, null);
+				offset += tileSize;
+			}
 		}
 	}
 

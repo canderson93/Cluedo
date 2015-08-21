@@ -119,9 +119,7 @@ public class Room extends Tile {
 	}
 	
 	@Override
-	public void draw(Graphics g, int x, int y) {
-		int size = Board.tileSize;
-		
+	public void draw(Graphics g, int x, int y, int size) {		
 		g.setColor(color);
 		if (name.equals("Blank")){g.setColor(blankColor);}
 		g.fillRect(x*size, y*size, size, size);
@@ -167,4 +165,5 @@ public class Room extends Tile {
 	
 	public int getWidth(){return maxX-minX+1;}
 	public int getHeight(){return maxY-minY+1;}
+	public Set<Player> getPlayers(){return players;}
 }

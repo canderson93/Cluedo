@@ -60,7 +60,7 @@ public class Door extends Tile {
 	public Room getRoom(){return room;}
 
 	@Override
-	public void draw(Graphics g, int x, int y) {
-		room.draw(g, x, y);
+	public void draw(Graphics g, int x, int y, int size) {
+		room.draw(g, x, y, size);
 	}
 }

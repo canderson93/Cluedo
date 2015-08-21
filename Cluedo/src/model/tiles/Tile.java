@@ -51,7 +51,7 @@ public abstract class Tile {
 	 * Draws this tile onto the graphics pane
 	 * @param g
 	 */
-	public abstract void draw(Graphics g, int x, int y);
+	public abstract void draw(Graphics g, int x, int y, int size);
 	
 	/**
 	 * Checks whether this room contains a player

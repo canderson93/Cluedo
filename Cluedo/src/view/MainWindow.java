@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -148,12 +149,24 @@ public class MainWindow extends JFrame {
 		
 		outerPanel.add(canvas, c);
 		
+		JButton button = new JButton("Next Round");
+		rightPane.add(button);
+		
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				game.nextRound();
+			}
+			
+		});
+		
 		GridBagConstraints divConstraints = new GridBagConstraints();
 		divConstraints.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.weighty = 1;
+		divConstraints.weightx = 1;
+		divConstraints.weighty = 1;
 		
-		this.add(divider, c);
+		this.add(divider, divConstraints);
 		this.pack();
 		this.setVisible(true);
 	}

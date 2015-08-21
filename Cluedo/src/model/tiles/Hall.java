@@ -28,8 +28,7 @@ public class Hall extends Tile{
 	}
 
 	@Override
-	public void draw(Graphics g, int x, int y) {
-		int size = Board.tileSize;
+	public void draw(Graphics g, int x, int y, int size) {
 		
 		//Draw the base tile
 		g.setColor(color);

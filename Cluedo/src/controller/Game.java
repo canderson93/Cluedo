@@ -1,10 +1,13 @@
 package controller;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.swing.JPanel;
 
 import model.Board;
 import model.Board.Direction;
@@ -196,13 +199,21 @@ public class Game {
 	 * @param direction
 	 * @return String
 	 */
-	public boolean move(Tile tile) {
+	public boolean move(Tile tile, JPanel view) {
 		
 		List<Tile> path = board.findPath(current.getTile(), tile);
-		if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
+		//TODO: Definitely uncomment this in real life
+		//if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
 		for(int i = 0; i < path.size(); i++){
 			if(i < path.size() - 1){ board.move(this.current, path.get(i), false); }
 			else { board.move(this.current, path.get(i), true); } //warn move method that this is the destination tile
+			
+			view.paintImmediately(view.getBounds());
+			try{
+				Thread.sleep(50);
+			} catch (InterruptedException e){
+				e.printStackTrace();
+			}
 		}
 		
 		return true;

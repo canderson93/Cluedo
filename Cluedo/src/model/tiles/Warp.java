@@ -53,13 +53,15 @@ public class Warp extends Door {
 			return 1;
 		}
 		
+		if (other instanceof Room && other == target.room){
+			return 1;
+		}
+		
 		return super.getDistance(other);
 	}
 	
 	@Override
-	public void draw(Graphics g, int x, int y){
-		int size = Board.tileSize;
-		
+	public void draw(Graphics g, int x, int y, int size){		
 		g.setColor(color);
 		g.fillRect(x*size, y*size, size, size);
 	}
