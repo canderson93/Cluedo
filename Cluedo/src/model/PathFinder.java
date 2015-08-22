@@ -1,8 +1,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import model.Board.Direction;
@@ -19,7 +21,7 @@ public class PathFinder {
 	
 	public static List<Tile> findPath(Board board, Tile fromTile, Tile toTile){
 		List<Tile> path = new ArrayList<Tile>();
-		Set<Tile> visited = new HashSet<Tile>();
+		Map<Tile, Set<Tile>> visitMap = new HashMap<Tile, Set<Tile>>();
 		
 		List<SearchNode> fringe = new ArrayList<SearchNode>();
 		
@@ -34,10 +36,11 @@ public class PathFinder {
 		
 		//If both tiles are rooms, try each combination of doors
 		if (fromTile instanceof Room && toTile instanceof Room){
-			for (Door d : ((Room) fromTile).getEntrances()){
-				for (Door d2 : ((Room) toTile).getEntrances()){
-					fringe.add(new SearchNode(d, null, d2, 0));
+			for (Door d : ((Room) toTile).getEntrances()){
+				for (Door d2 : ((Room) fromTile).getEntrances()){
+					fringe.add(new SearchNode(d2, null, d, 0));
 				}
+				visitMap.put(d, new HashSet<Tile>());
 			}
 		}
 		//If fromTile is a room, try each door
@@ -45,15 +48,18 @@ public class PathFinder {
 			for (Door d : ((Room) fromTile).getEntrances()){
 				fringe.add(new SearchNode(d, null, toTile, 0));
 			}
+			visitMap.put(toTile, new HashSet<Tile>());
 		}
 		//As above
 		else if (toTile instanceof Room){
 			for (Door d : ((Room) toTile).getEntrances()){
 				fringe.add(new SearchNode(fromTile, null, d, 0));
+				visitMap.put(d, new HashSet<Tile>());
 			}
 		}
 		else {
 			fringe.add(new SearchNode(fromTile, null, toTile, 0));
+			visitMap.put(toTile, new HashSet<Tile>());
 		}
 		
 		//If nothing was added to the fringe, that means that we have a room with no entrances
@@ -74,6 +80,7 @@ public class PathFinder {
 			}
 			if (current.node == current.target){break;}
 
+			Set<Tile> visited = visitMap.get(current.target);
 			fringe.remove(current);
 			if (!visited.add(current.node)){continue;}
 			if (current.node instanceof Room){continue;}
@@ -81,7 +88,7 @@ public class PathFinder {
 			//Search surrounding tiles, and add them to the fringe
 			for (Direction d : Direction.values()){
 				Tile t = board.getTile(current.node, d);
-				if(t != null){
+				if(t != null && current.node.canMoveTo(t)){
 					fringe.add(new SearchNode(t, current, current.target, current.dist+1));
 				}
 			}
@@ -112,6 +119,18 @@ public class PathFinder {
 		
 		public double heuristic(){
 			return dist+cost;
+		}
+		
+		/**
+		 * Checks to see if this path has already visited a tile
+		 * @param t
+		 * @return
+		 */
+		public boolean pathVisited(Tile t){
+			if (t == node){ return true;}
+			if (parent == null){return false;}
+			
+			return parent.pathVisited(t);
 		}
 	}
 }
