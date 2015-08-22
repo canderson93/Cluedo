@@ -106,6 +106,7 @@ public class Board {
 	public void drawBoard(Graphics g, Tile hoverTile, Tile selectedTile){
 		if(hoverTile != null && hoverTile.getKey() == '#'){hoverTile = null;} //Ignore the blank room as the selected tile
 		if(selectedTile != null && selectedTile.getKey() == '#'){selectedTile = null;}
+		
 		//Draw the underlying tiles
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
@@ -114,10 +115,11 @@ public class Board {
 						(board[i][j] instanceof Door && ((Door)board[i][j]).getRoom() == hoverTile)){
 					 drawHighlightedTile(g, i, j);
 				}
-				if(selectedTile != null && board[i][j] == selectedTile && selectedTile.getKey() != '#'){
+				if(selectedTile != null && board[i][j] == selectedTile ||
+						(board[i][j] instanceof Door && ((Door)board[i][j]).getRoom() == selectedTile)){
 					 drawSelectedTile(g, i, j);
 				}
-				//If a player is on the tile, draw that instead
+				//If a player is on the tile, draw that as well
 				if (board[i][j].getPlayer() != null){
 					Image img = board[i][j].getPlayer().getImage();
 					g.drawImage(img, i*tileSize, j*tileSize, tileSize, tileSize, null);

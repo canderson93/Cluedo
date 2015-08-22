@@ -19,10 +19,23 @@ import model.tiles.Tile;
  */
 public class PathFinder {
 	
+	/**
+	 * Finds the shortest path between two tiles
+	 * @param board
+	 * @param fromTile
+	 * @param toTile
+	 * @return
+	 */
 	public static List<Tile> findPath(Board board, Tile fromTile, Tile toTile){
-		List<Tile> path = new ArrayList<Tile>();
-		Map<Tile, Set<Tile>> visitMap = new HashMap<Tile, Set<Tile>>();
+		/*
+		 *This is a modified A* search, where we can have multiple start and finish nodes,
+		 *and we only return the shortest route between the combination of them.
+		 *
+		 *For this reason, we have to maintain multiple visited sets, as we could be searching
+		 *the same node multiple times from different paths.
+		 */
 		
+		Map<Tile, Set<Tile>> visitMap = new HashMap<Tile, Set<Tile>>();
 		List<SearchNode> fringe = new ArrayList<SearchNode>();
 		
 		//If either tile is a door, search from the associated room instead
@@ -61,11 +74,7 @@ public class PathFinder {
 			fringe.add(new SearchNode(fromTile, null, toTile, 0));
 			visitMap.put(toTile, new HashSet<Tile>());
 		}
-		
-		//If nothing was added to the fringe, that means that we have a room with no entrances
-		//(e.g. blank room) so no possible path exists
-		if (fringe.isEmpty()){return path;}
-		
+
 		SearchNode current = null;
 		
 		//Perform the A* search
@@ -94,6 +103,12 @@ public class PathFinder {
 			}
 		}
 		
+		List<Tile> path = new ArrayList<Tile>();
+
+		//If it didn't reach the node, there is no path available, so return an empty path
+		if (current == null || current.node != current.target){return path;}
+		
+		//Follow the links backwards to build the path list
 		while (current.parent != null){
 			path.add(0, current.node);
 			current = current.parent;
@@ -119,18 +134,6 @@ public class PathFinder {
 		
 		public double heuristic(){
 			return dist+cost;
-		}
-		
-		/**
-		 * Checks to see if this path has already visited a tile
-		 * @param t
-		 * @return
-		 */
-		public boolean pathVisited(Tile t){
-			if (t == node){ return true;}
-			if (parent == null){return false;}
-			
-			return parent.pathVisited(t);
 		}
 	}
 }
