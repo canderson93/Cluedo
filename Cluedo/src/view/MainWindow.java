@@ -23,10 +23,12 @@ import controller.Game;
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 	private BoardCanvas canvas;
+	private GamePanel rightPane;
+	
 	private Game game;
 	
 	//Window components
-	JSplitPane divider; 
+	JSplitPane divider;
 	
 	public MainWindow(){
 		super("Cluedo - Super Hyper Extra Edition");
@@ -47,7 +49,7 @@ public class MainWindow extends JFrame {
 				}
 	        }
 		});
-		
+				
 		JMenuBar menu = createMenu();
 				
 		this.setJMenuBar(menu);
@@ -130,13 +132,11 @@ public class MainWindow extends JFrame {
 		}
 		
 		this.game = new Game(filename, players);
-		this.canvas = new BoardCanvas(game);
+		this.canvas = new BoardCanvas(game, this);
 		
 		JPanel outerPanel = new JPanel(new GridBagLayout());
-		JPanel rightPane = new JPanel();
-		
-		rightPane.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
-								
+		rightPane = new GamePanel(game, this);
+										
 		//Set constraints to consume all available space
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
@@ -149,18 +149,6 @@ public class MainWindow extends JFrame {
 		
 		outerPanel.add(canvas, c);
 		
-		JButton button = new JButton("Next Round");
-		rightPane.add(button);
-		
-		button.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				game.nextRound();
-			}
-			
-		});
-		
 		GridBagConstraints divConstraints = new GridBagConstraints();
 		divConstraints.fill = GridBagConstraints.BOTH;
 		divConstraints.weightx = 1;
@@ -169,8 +157,19 @@ public class MainWindow extends JFrame {
 		this.add(divider, divConstraints);
 		this.pack();
 		this.setVisible(true);
+		
+		updateWindow();
 	}
 	
+	/**
+	 * Performs the conditional checks for window elements, and updates
+	 * them
+	 */
+	public void updateWindow(){
+		rightPane.updateWindow();
+		
+		this.repaint();
+	}
 
 	public static void main(String[] args) {
 		new MainWindow().startNewGame("board.txt");
