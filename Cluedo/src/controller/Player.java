@@ -16,9 +16,9 @@ import model.tiles.Tile;
  *
  */
 public class Player {
-	private final Image img;
-	private final String character;
-	private final char key;
+	private Image img;
+	private String character;
+	private char key;
 	private List<Card> hand = new ArrayList<Card>();
 	private List<Card> unseenCards; //cards the player hasn't seen, this is updated throughout the game
 	private boolean playing = true;

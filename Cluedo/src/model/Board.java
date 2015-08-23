@@ -58,8 +58,8 @@ public class Board {
 	 * 
 	 * @param player
 	 *            The player to be moved
-	 * @param direction
-	 *            The direction to move
+	 * @param 
+TODO:
 	 * @return whether the move was successful
 	 */
 	public boolean move(Player player, Tile tile, boolean finalTile) {

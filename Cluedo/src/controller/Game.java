@@ -1,13 +1,20 @@
 package controller;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.swing.ButtonGroup;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import model.Board;
 import model.Board.Direction;
@@ -26,7 +33,7 @@ import model.tiles.Tile;
  * @author Chloe
  * 
  */
-public class Game {
+public class Game extends JDialog implements ActionListener{
 
 	private Board board;
 	private boolean gameComplete = false;
@@ -34,7 +41,6 @@ public class Game {
 
 	List<Card> solution = new ArrayList<Card>();
 	List<Player> players = new ArrayList<Player>();
-
 	// Complete list of all cards in the deck
 	List<WeaponCard> weapons = new ArrayList<WeaponCard>();
 	List<CharacterCard> characters = new ArrayList<CharacterCard>();
@@ -45,12 +51,71 @@ public class Game {
 
 	public Game(String filename, int numPlayers) {
 		this.board = Board.parseBoard(filename);
-
 		loadCards();
 		createPlayers(numPlayers);
+		//change character name to what they want
+		createUsers();
 		this.current = this.players.get(0);
 		dealRemainder();
+		nextRound();
 	}
+
+	public void createUsers() {
+		
+		 ButtonGroup group = new ButtonGroup();
+		 for(Characters c : Characters.values()){
+			 //Create the radio buttons.
+		        JRadioButton coronel = new JRadioButton("Coronel Mustard");
+		        coronel.setMnemonic(KeyEvent.VK_B);
+		        coronel.setActionCommand("Cornoneeel");
+		        coronel.setSelected(true);
+		        group.add(coronel);
+		        coronel.addActionListener(null);
+		        
+		 }
+	    
+	     //group.add(catButton);
+
+		
+		
+	}
+	
+	
+	/**
+	 * Helper method to convert the string to title case for pretty printing.
+	 * 
+	 * @param orig
+	 * @return
+	 */
+	// This is mainly used for converting enums to a printable form
+	public static String toTitleCase(String orig) {
+		String rtn = "";
+		boolean firstChar = true;
+
+		for (int i = 0; i < orig.length(); i++) {
+			char c = orig.charAt(i);
+
+			// Convert underscores to spaces, and update whether this is the
+			// first letter
+			// in a word
+			if (c == ' ' || c == '_') {
+				firstChar = true;
+				rtn += ' ';
+				continue;
+			}
+
+			// Apply title case rules
+			if (firstChar) {
+				rtn += Character.toUpperCase(c);
+				firstChar = false;
+			} else {
+				rtn += Character.toLowerCase(c);
+			}
+		}
+
+		return rtn;
+	}
+
 
 	/**
 	 * Load all of the cards into lists and add three random cards to the
@@ -134,7 +199,7 @@ public class Game {
 	 * there are none left
 	 *
 	 * */
-	private void dealRemainder() {
+	public void dealRemainder() {
 		// Join all the card collections to make the rest of the deck
 		List<Card> restOfDeck = new ArrayList<Card>();
 		restOfDeck.addAll(characters);
@@ -203,9 +268,15 @@ public class Game {
 		
 		List<Tile> path = board.findPath(current.getTile(), tile);
 		//TODO: Definitely uncomment this in real life
-		//if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
+		System.out.println("roll : " + this.roll);
+		if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
+		this.roll -= path.size();
 		for(int i = 0; i < path.size(); i++){
-			if(i < path.size() - 1){ board.move(this.current, path.get(i), false); }
+			if(i < path.size() - 1){ 
+				//don't allow to move once in a room
+				if(path.get(i) instanceof Room){ board.move(this.current, path.get(i), true); } 
+				else{ board.move(this.current, path.get(i), false); } 
+			}
 			else { board.move(this.current, path.get(i), true); } //warn move method that this is the destination tile
 			
 			view.paintImmediately(view.getBounds());
@@ -350,4 +421,10 @@ public class Game {
 	public void setRoll(int i) { this.roll = i; }
 	public void setSolution(List<Card> cards) {this.solution = cards;}
 	public void setCurrent(Player p) {this.current = p;}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }
