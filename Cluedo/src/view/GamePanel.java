@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
@@ -21,20 +22,23 @@ import controller.Player;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 	public static final int WIDTH = 150;
-	private MainWindow window;
 	private Game game;
+	
+	private Image leftDie;
+	private Image rightDie;
 	
 	private JButton suggestBtn;
 	public GamePanel(Game g, MainWindow window){
 		this.game = g;
-		this.window = window;
 		
 		this.setMinimumSize(new Dimension(WIDTH, 0));
 		this.setMaximumSize(new Dimension(WIDTH, Integer.MAX_VALUE));
 		
 		this.setLayout(new BorderLayout());
 		
-		//Name & Icon at the top of the panel
+		/* 
+		 * Names at the top
+		 */
 		JPanel nameFrame = new JPanel(){
 			public void paintComponent(Graphics g){
 				FontMetrics fm = g.getFontMetrics();
@@ -54,22 +58,63 @@ public class GamePanel extends JPanel {
 				g.drawString(current.getName(), 35, (int)(charSize.getHeight() + nameSize.getHeight()));
 			}
 		};
-		nameFrame.setPreferredSize(new Dimension(WIDTH, 32));
+		nameFrame.setPreferredSize(new Dimension(WIDTH, 40));
 		
-		//Buttons at the bottom
+		/*
+		 * Middle Info panel
+		 */
+		JPanel infoPanel = new JPanel(){
+			public void paintComponent(Graphics g){
+				//Draw the two dice
+				g.drawImage(leftDie, 0, 0, 50, 50, null);
+				g.drawImage(rightDie, 0, 52, 50, 50, null);
+			}
+		};
+		
+		/* 
+		 * Buttons at the bottom 
+		 */
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
 		
 		//Suggest Button
 		suggestBtn = new JButton("Suggest");
+		suggestBtn.setAlignmentX(CENTER_ALIGNMENT);
+		suggestBtn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		//Accuse Button
+		JButton accuseBtn = new JButton("Accuse");
+		accuseBtn.setAlignmentX(CENTER_ALIGNMENT);
+		accuseBtn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		//Show Hand Button
+		JButton handBtn = new JButton("Show Hand");
+		handBtn.setAlignmentX(CENTER_ALIGNMENT);
+		handBtn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		//Next Round button
 		JButton roundBtn = new JButton("Next Round");
+		roundBtn.setAlignmentX(CENTER_ALIGNMENT);
 		roundBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				game.nextRound();
+				
+				updateDice();
 				window.updateWindow();
 				GamePanel.this.repaint();
 			}
@@ -77,11 +122,16 @@ public class GamePanel extends JPanel {
 		
 		//Add buttons to panel
 		buttonPanel.add(suggestBtn);
+		buttonPanel.add(accuseBtn);
+		buttonPanel.add(handBtn);
 		buttonPanel.add(roundBtn);
 		
 		//Add the panels to the pane
 		this.add(nameFrame, BorderLayout.NORTH);
+		this.add(infoPanel, BorderLayout.CENTER);
 		this.add(buttonPanel, BorderLayout.SOUTH);
+		
+		updateDice();
 	}
 	
 	/**
@@ -89,5 +139,22 @@ public class GamePanel extends JPanel {
 	 */
 	public void updateWindow(){
 		suggestBtn.setEnabled(game.getCurrent().getTile() instanceof Room);
+	}
+	
+	public void updateDice(){
+		int roll = game.getRoll();
+		//ranges for a single die
+		int min = roll-6;
+		int max = roll-1 < 6 ? roll-1 : 6;
+		
+		int left = (int)(min + Math.random() * (max-min)+1);
+		int right = roll-left;
+		
+		//Debugging stuff
+		if (left > 6){System.out.println("Whoops. Left was "+left);}
+		if (right > 6){System.out.println("Whoops. Right was "+right);}
+		
+		leftDie = BoardCanvas.loadImage("dice/die_"+left);
+		rightDie = BoardCanvas.loadImage("dice/die_"+right);
 	}
 }

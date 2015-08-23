@@ -92,7 +92,10 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 		int mouseX = e.getX() / board.tileSize;
 		int mouseY = e.getY() / board.tileSize;
 		this.selectedTile = board.getTile(mouseX, mouseY);
-		game.move(selectedTile, this);
+		
+		if (selectedTile != null){
+			game.move(selectedTile, this);
+		}
 		
 		window.updateWindow();
 	}
