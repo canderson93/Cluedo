@@ -67,7 +67,7 @@ public class GamePanel extends JPanel {
 			public void paintComponent(Graphics g){
 				//Draw the two dice
 				g.drawImage(leftDie, 0, 0, 50, 50, null);
-				g.drawImage(rightDie, 0, 52, 50, 50, null);
+				g.drawImage(rightDie, 52, 0, 50, 50, null);
 			}
 		};
 		
@@ -144,17 +144,17 @@ public class GamePanel extends JPanel {
 	public void updateDice(){
 		int roll = game.getRoll();
 		//ranges for a single die
-		int min = roll-6;
+		int min = roll-6 > 0 ? roll-6 : 1;
 		int max = roll-1 < 6 ? roll-1 : 6;
 		
-		int left = (int)(min + Math.random() * (max-min)+1);
+		int left = (int)(min + Math.random() * (max-min));
 		int right = roll-left;
 		
 		//Debugging stuff
-		if (left > 6){System.out.println("Whoops. Left was "+left);}
-		if (right > 6){System.out.println("Whoops. Right was "+right);}
+		if (left > 6 || left < 1){System.out.println("Whoops. Left was "+left);}
+		if (right > 6 || right < 1){System.out.println("Whoops. Right was "+right);}
 		
-		leftDie = BoardCanvas.loadImage("dice/die_"+left);
-		rightDie = BoardCanvas.loadImage("dice/die_"+right);
+		leftDie = BoardCanvas.loadImage("dice/die_"+left+".png");
+		rightDie = BoardCanvas.loadImage("dice/die_"+right+".png");
 	}
 }
