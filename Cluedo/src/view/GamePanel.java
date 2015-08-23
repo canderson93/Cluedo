@@ -65,9 +65,10 @@ public class GamePanel extends JPanel {
 		 */
 		JPanel infoPanel = new JPanel(){
 			public void paintComponent(Graphics g){
+				int width = g.getClipBounds().width;
 				//Draw the two dice
-				g.drawImage(leftDie, 0, 0, 50, 50, null);
-				g.drawImage(rightDie, 52, 0, 50, 50, null);
+				g.drawImage(leftDie, width/2-51, 0, 50, 50, null);
+				g.drawImage(rightDie, width/2+1, 0, 50, 50, null);
 			}
 		};
 		
@@ -138,7 +139,13 @@ public class GamePanel extends JPanel {
 	 * Perform the conditional checks on this window
 	 */
 	public void updateWindow(){
-		suggestBtn.setEnabled(game.getCurrent().getTile() instanceof Room);
+		Player p = game.getCurrent();
+		if (p.getTile() instanceof Room){
+			suggestBtn.setEnabled(p.getTile() != p.getLastSuggestion());
+		} else {
+			suggestBtn.setEnabled(false);
+		}
+		
 	}
 	
 	public void updateDice(){

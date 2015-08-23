@@ -23,6 +23,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import view.BoardCanvas;
+
 /**
  * The class that represents and handles the board
  * 
@@ -180,6 +182,14 @@ TODO:
 			for (Player p : r.getPlayers()){
 				Image img = p.getImage();
 				g.drawImage(img, offset, midY, tileSize, tileSize, null);
+				offset += tileSize;
+			}
+			
+			//Draw the weapons in the room
+			offset = midX-(tileSize*r.getWeapons().size()/2);
+			for (Weapons w : r.getWeapons()){
+				Image img = BoardCanvas.loadImage("weapons/"+w.toString().toLowerCase()+".png");
+				g.drawImage(img, offset, midY+tileSize, tileSize, tileSize, null);
 				offset += tileSize;
 			}
 		}

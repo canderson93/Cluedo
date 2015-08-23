@@ -57,6 +57,17 @@ public class Game extends JDialog implements ActionListener{
 		createUsers();
 		this.current = this.players.get(0);
 		dealRemainder();
+		
+		for (Weapons w : Weapons.values()){
+			for (Room r : board.getRooms()){
+				if (r.getKey() == '#'){continue; }
+				if (!r.containsWeapon()){
+					System.out.println("Added "+w.toString()+" to "+r.getName());
+					r.addWeapon(w);
+					break;
+				}
+			}
+		}
 		nextRound();
 	}
 
@@ -225,8 +236,12 @@ public class Game extends JDialog implements ActionListener{
 	 *
 	 */
 	public void nextRound() {
-
-		this.roll = new Random().nextInt(10) + 2;
+		//By doing it this way, we get a distribution more like
+		//real dice, with a roll of 7 being the most likely
+		int left = new Random().nextInt(6)+1;
+		int right = new Random().nextInt(6)+1;
+		
+		this.roll = left + right;
 		this.current = nextPlayer();
 	}
 
