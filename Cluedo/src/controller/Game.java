@@ -58,8 +58,12 @@ public class Game extends JDialog implements ActionListener{
 		this.current = this.players.get(0);
 		dealRemainder();
 		
+		List<Room> rooms = board.getRooms();
 		for (Weapons w : Weapons.values()){
-			for (Room r : board.getRooms()){
+			while (true){
+				int index = new Random().nextInt(rooms.size());
+
+				Room r = rooms.get(index);
 				if (r.getKey() == '#'){continue; }
 				if (!r.containsWeapon()){
 					System.out.println("Added "+w.toString()+" to "+r.getName());
