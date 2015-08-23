@@ -37,7 +37,7 @@ public class PathFinder {
 		
 		Map<Tile, Set<Tile>> visitMap = new HashMap<Tile, Set<Tile>>();
 		List<SearchNode> fringe = new ArrayList<SearchNode>();
-		
+				
 		//If either tile is a door, search from the associated room instead
 		if (fromTile instanceof Door){
 			fromTile = ((Door)fromTile).getRoom();
@@ -97,7 +97,7 @@ public class PathFinder {
 			//Search surrounding tiles, and add them to the fringe
 			for (Direction d : Direction.values()){
 				Tile t = board.getTile(current.node, d);
-				if(t != null && current.node.canMoveTo(t)){
+				if(t != null && !t.containsPlayer() && current.node.canMoveTo(t)){
 					fringe.add(new SearchNode(t, current, current.target, current.dist+1));
 				}
 			}

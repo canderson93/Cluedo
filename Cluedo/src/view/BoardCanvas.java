@@ -24,15 +24,18 @@ import model.tiles.Tile;
  */
 @SuppressWarnings("serial")
 public class BoardCanvas extends JPanel implements MouseMotionListener, MouseListener{
+	private MainWindow window;
+	
 	private Board board;
 	private Tile hoverTile;
 	private Tile selectedTile;
 	private Game game;
 	
-	public BoardCanvas(Game game){
+	public BoardCanvas(Game game, MainWindow window){
 		super();
 		this.game = game;
 		this.board = game.getBoard();
+		this.window = window;
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
 		this.setPreferredSize(new Dimension(board.getWidth()*board.tileSize, board.getHeight()*board.tileSize));
@@ -89,14 +92,19 @@ public class BoardCanvas extends JPanel implements MouseMotionListener, MouseLis
 		int mouseX = e.getX() / board.tileSize;
 		int mouseY = e.getY() / board.tileSize;
 		this.selectedTile = board.getTile(mouseX, mouseY);
-		game.move(selectedTile, this);
-		repaint();
+		
+		if (selectedTile != null){
+			game.move(selectedTile, this);
+		}
+		
+		window.updateWindow();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		this.selectedTile = null;
-		repaint();
+		
+		window.updateWindow();
 	}
 
 	@Override
