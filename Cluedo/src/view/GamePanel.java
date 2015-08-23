@@ -43,19 +43,24 @@ public class GamePanel extends JPanel {
 			public void paintComponent(Graphics g){
 				FontMetrics fm = g.getFontMetrics();
 				Player current = game.getCurrent();
-				
-				g.drawImage(current.getImage(), 0, 0, 32, 32, null);
-				
-				//Draw the name
+								
+				//Calculate center of screen
 				Rectangle2D nameSize = fm.getStringBounds("PLAYER NAME", g);
 				Rectangle2D charSize = fm.getStringBounds(current.getName(), g);
+				int mid = g.getClipBounds().width/2;
+				int offset = (int)((Math.max(nameSize.getWidth(), charSize.getWidth()) + 32)/2);
 				
+				//Draw icon
+				g.drawImage(current.getImage(), mid-offset, 0, 32, 32, null);
+				
+				//Move offset by img size, and draw name
+				offset -= 32;
 				g.setFont(g.getFont().deriveFont(Font.BOLD));
-				g.drawString("PLAYER NAME", 35, (int)nameSize.getHeight());
+				g.drawString("PLAYER NAME", mid-offset, (int)nameSize.getHeight());
 				
 				//Draw the character
 				g.setFont(g.getFont().deriveFont(Font.PLAIN));
-				g.drawString(current.getName(), 35, (int)(charSize.getHeight() + nameSize.getHeight()));
+				g.drawString(current.getName(), mid-offset, (int)(charSize.getHeight() + nameSize.getHeight()));
 			}
 		};
 		nameFrame.setPreferredSize(new Dimension(WIDTH, 40));
@@ -69,6 +74,12 @@ public class GamePanel extends JPanel {
 				//Draw the two dice
 				g.drawImage(leftDie, width/2-51, 0, 50, 50, null);
 				g.drawImage(rightDie, width/2+1, 0, 50, 50, null);
+				
+				String rollString = "Remaining: "+game.getRoll();
+				FontMetrics fm = g.getFontMetrics();
+				Rectangle2D strSize = fm.getStringBounds(rollString, g);
+				
+				g.drawString(rollString, (int)((g.getClipBounds().width/2)-(strSize.getWidth()/2)), (int)(50+strSize.getHeight()));
 			}
 		};
 		
@@ -83,8 +94,9 @@ public class GamePanel extends JPanel {
 		suggestBtn.setAlignmentX(CENTER_ALIGNMENT);
 		suggestBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				game.suggestion("MISS_SCARLETT", "REVOLVER", (Room)game.getCurrent().getTile());
 				
+				window.updateWindow();
 			}
 		});
 		

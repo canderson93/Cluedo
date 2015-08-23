@@ -286,10 +286,11 @@ public class Game extends JDialog implements ActionListener{
 	public boolean move(Tile tile, JPanel view) {
 		
 		List<Tile> path = board.findPath(current.getTile(), tile);
-		//TODO: Definitely uncomment this in real life
 		System.out.println("roll : " + this.roll);
-		if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
-		this.roll -= path.size();
+		
+		if (roll <= 0){return false;}
+		if(path.size() == 0){return false;}
+	
 		for(int i = 0; i < path.size(); i++){
 			if(i < path.size() - 1){ 
 				//don't allow to move once in a room
@@ -297,13 +298,20 @@ public class Game extends JDialog implements ActionListener{
 				else{ board.move(this.current, path.get(i), false); } 
 			}
 			else { board.move(this.current, path.get(i), true); } //warn move method that this is the destination tile
+			this.roll--;
 			
 			view.paintImmediately(view.getBounds());
 			try{
-				Thread.sleep(50);
+				Thread.sleep(150);
 			} catch (InterruptedException e){
 				e.printStackTrace();
 			}
+			
+			if (this.roll == 0){break;}
+		}
+		
+		if (this.current.getTile() instanceof Room){
+			this.roll = 0;
 		}
 		
 		return true;
@@ -369,6 +377,7 @@ public class Game extends JDialog implements ActionListener{
 		// Move the weapon to the room
 		r.addWeapon(suggestedWeapon);
 		for (Room rooms : board.getRooms()) {
+			if (rooms == r){continue; }
 			if (rooms.containsWeapon(suggestedWeapon)) {
 				rooms.removeWeapon(suggestedWeapon);
 				break;
@@ -380,8 +389,8 @@ public class Game extends JDialog implements ActionListener{
 		for (Player p : players) {
 			if (p.getName().equals(c)) {
 				Tile t = p.getTile();
-				r.setPlayer(p);
 				t.removePlayer(p);
+				r.setPlayer(p);
 				break;
 			}
 		}
