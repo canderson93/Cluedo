@@ -59,7 +59,6 @@ public class Game{
 				Room r = rooms.get(index);
 				if (r.getKey() == '#'){continue; }
 				if (!r.containsWeapon()){
-					System.out.println("Added "+w.toString()+" to "+r.getName());
 					r.addWeapon(w);
 					break;
 				}
@@ -223,7 +222,6 @@ public class Game{
 	}
 	
 	public void addPlayer(String username, Characters character, int i){
-		System.out.println("username : " + username + " character : " + character);
 		this.players.get(i).setUsername(username);
 		this.players.get(i).setCharacter(character);
 	}
@@ -308,6 +306,7 @@ public class Game{
 		RoomCard room = new RoomCard(r);
 		CharacterCard character = new CharacterCard(c);
 		WeaponCard weapon = new WeaponCard(w);
+
 		if (this.solution.contains(room) && this.solution.contains(character)
 				&& this.solution.contains(weapon)) {
 			this.gameComplete = true;

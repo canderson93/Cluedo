@@ -456,7 +456,6 @@ TODO:
 					}
 
 					if (!(r instanceof Room)) {
-						System.out.println(r.getX() + " " + r.getY());
 						throw new RuntimeException("Could not parse: Door at "
 								+ i + " " + j + " doesn't lead to a room");
 					}
@@ -505,7 +504,6 @@ TODO:
 				try {
 					rtn += board[j][i].getKey() + " ";
 				} catch (NullPointerException e) {
-					System.out.println(i + " " + j);
 				}
 			}
 			rtn += "\n";

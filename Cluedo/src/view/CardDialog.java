@@ -28,6 +28,7 @@ import controller.Game;
 import model.cards.Card;
 
 
+@SuppressWarnings("serial")
 public class CardDialog extends JDialog implements ActionListener{
 	
 	public CardDialog(JFrame parent, String message, List<Card> hand) {
@@ -37,9 +38,6 @@ public class CardDialog extends JDialog implements ActionListener{
 	
 	public CardDialog(JFrame parent, String message, List<Card> allCards, List< Card> unseenCards){
 		super(parent, message, true);	
-		for(Card c : allCards){
-			System.out.println(c);
-		}
 		run(parent, allCards, unseenCards);
 	}
 	
@@ -52,7 +50,7 @@ public class CardDialog extends JDialog implements ActionListener{
 		}
 		
 	    JPanel messagePane = new JPanel();
-	    messagePane.setLayout(new GridLayout(0, 6, 2, 2));
+	    messagePane.setLayout(new GridLayout(0, allCards.size() < 6 ? allCards.size() : 6, 2, 2));
 	   // JScrollPane scrollPane = new JScrollPane();
 	    // messagePane.add(new JLabel(message + "fuck"));
     	for(Card c : allCards){
@@ -73,7 +71,6 @@ public class CardDialog extends JDialog implements ActionListener{
     					g.setColor(Color.WHITE);
     					name.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
     	    		}    				
-    				System.out.println("drawing card " + originalStr);
     				g.drawString(name.getIterator(), (int)((g.getClipBounds().width/2)-(strSize.getWidth()/2)), (int)(g.getClipBounds().height/2));    	    		
     	    	}	
     	    };

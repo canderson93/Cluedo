@@ -48,7 +48,7 @@ public class MainWindow extends JFrame {
 		this.addWindowListener(new WindowAdapter(){
 			@Override
 			public void windowClosing(WindowEvent ev) {
-				int result = JOptionPane.showConfirmDialog(MainWindow.this, "The killer is still at large!\n"
+				int result = JOptionPane.showConfirmDialog(MainWindow.this, "The Killer is still at large!\n"
 						+ "Are you sure you want to close?", "HALT!", JOptionPane.YES_NO_OPTION);			
 				if (result == JOptionPane.YES_OPTION){
 		            MainWindow.this.dispose();

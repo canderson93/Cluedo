@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -13,11 +12,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import model.cards.Card;
 import model.tiles.Room;
 import controller.Game;
 import controller.Player;
@@ -103,7 +106,15 @@ public class GamePanel extends JPanel implements KeyListener{
 				MurderDialog md = new MurderDialog(window, game, (Room)game.getCurrent().getTile());
 				
 				if (md.isFinished()){
-					game.suggestion(md.getCharacter(), md.getWeapon(), (Room)game.getCurrent().getTile());
+					List<Card> l = new ArrayList<Card>();
+					l.add(game.suggestion(md.getCharacter(), md.getWeapon(), (Room)game.getCurrent().getTile()));
+					
+					if (l.size() == 0){
+						JOptionPane.showMessageDialog(window, "Nobody had any cards!", "Result", JOptionPane.OK_OPTION);
+					} else {
+						new CardDialog(window, "Result", l);
+					}
+					
 					game.nextRound();
 				}
 				window.updateWindow();
@@ -118,7 +129,25 @@ public class GamePanel extends JPanel implements KeyListener{
 				MurderDialog md = new MurderDialog(window, game);
 				
 				if (md.isFinished()){
-					game.accusation(md.getCharacter(), md.getWeapon(), md.getRoom());
+					boolean result = game.accusation(md.getRoom(), md.getCharacter(), md.getWeapon());
+					if (result){
+						//We have a winner! Remove the game window
+						window.setVisible(false);
+						window.dispose();
+						
+						JOptionPane.showConfirmDialog(null, "Correct! "+game.getWinner().getUserName()+" is the winner!", "Winner!", JOptionPane.OK_OPTION);
+						System.exit(0);
+					} else {
+						JOptionPane.showMessageDialog(window, "Wrong. Sit in the corner and think about your transgressions.", "Incorrect", JOptionPane.OK_OPTION);
+						
+						if (game.isFinished()){
+							window.setVisible(false);
+							window.dispose();
+							
+							JOptionPane.showMessageDialog(null, "Utter Failure. Nobody wins", "Dominated", JOptionPane.OK_OPTION);
+							System.exit(0);
+						}
+					}
 					game.nextRound();
 				}
 				window.updateWindow();
@@ -193,17 +222,12 @@ public class GamePanel extends JPanel implements KeyListener{
 		int left = (int)(min + Math.random() * (max-min));
 		int right = roll-left;
 		
-		//Debugging stuff
-		if (left > 6 || left < 1){System.out.println("Whoops. Left was "+left);}
-		if (right > 6 || right < 1){System.out.println("Whoops. Right was "+right);}
-		
 		leftDie = BoardCanvas.loadImage("dice/die_"+left+".png");
 		rightDie = BoardCanvas.loadImage("dice/die_"+right+".png");
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.print("hi");
 		if(e.getKeyCode() == (KeyEvent.VK_ESCAPE)){
 			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 		}
@@ -212,7 +236,6 @@ public class GamePanel extends JPanel implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.print("hi");
 		if(e.getKeyCode() == (KeyEvent.VK_ESCAPE)){
 			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 		}
