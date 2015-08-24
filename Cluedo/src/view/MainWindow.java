@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Enumeration;
 import java.util.Map;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.JFrame;
@@ -20,6 +22,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 
+import model.Characters;
 import controller.Game;
 import controller.Player;
 
@@ -172,23 +175,23 @@ public class MainWindow extends JFrame {
 		JPanel panel = new JPanel();
 		ButtonGroup group = new ButtonGroup();
         JRadioButton colonel = new JRadioButton("Colonel Mustard");
-        colonel.setActionCommand("Colonel Mustard");
+        colonel.setActionCommand("COLONEL_MUSTARD");
         colonel.setSelected(true);
         JRadioButton white = new JRadioButton("Mrs White");
-        white.setActionCommand("Mrs White");
+        white.setActionCommand("MRS_WHITE");
         white.setSelected(false);
         JRadioButton green = new JRadioButton("Reverend Green");
-        green.setActionCommand("Reverend Green");
+        green.setActionCommand("REVEREND_GREEN");
         green.setSelected(false);
         JRadioButton scarlett = new JRadioButton("Miss Scarlett");
-        white.setActionCommand("Miss Scarlett");
-        white.setSelected(false);
+        scarlett.setActionCommand("MISS_SCARLETT");
+        scarlett.setSelected(false);
         JRadioButton peacock = new JRadioButton("Mrs Peacock");
-        white.setActionCommand("Mrs Peacock");
-        white.setSelected(false);
+        peacock.setActionCommand("MRS_PEACOCK");
+        peacock.setSelected(false);
         JRadioButton plum = new JRadioButton("Professor Plum");
-        white.setActionCommand("Professor Plum");
-        white.setSelected(false);
+        plum.setActionCommand("PROFESSOR_PLUM");
+        plum.setSelected(false);
         //group the radio buttons
         group.add(colonel);
         group.add(white);
@@ -210,9 +213,9 @@ public class MainWindow extends JFrame {
         panel.add(colonel);
         panel.add(white);
         panel.add(green);
-        panel.add(white);
-        panel.add(scarlett);
         panel.add(peacock);
+        panel.add(plum);
+        panel.add(scarlett);
         
         String[] options =  { "Confirm", "Exit" };
         for(int i = 0; i < players; i++){
@@ -227,11 +230,21 @@ public class MainWindow extends JFrame {
 	        	String buttonName = ((JToggleButton.ToggleButtonModel)group.getSelection()).getActionCommand();
 	        	//set selected button to be uncheckable now
 	        	((JToggleButton.ToggleButtonModel)group.getSelection()).setEnabled(false);
-	        	((JToggleButton.ToggleButtonModel)group.getSelection()).setSelected(false);
+	        	//((JToggleButton.ToggleButtonModel)group.getSelection()).setSelected(false);
+	        	group.clearSelection();
+	        	Enumeration<AbstractButton> en = group.getElements();
+	        	while (en.hasMoreElements()){
+	        		AbstractButton b = en.nextElement();
+	        		if (b.isEnabled()){
+	        			group.setSelected(b.getModel(), true);
+	        			break;
+	        		}
+	        	}
 	        	while(true){
-	        		String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);							
-					if(username != null){
-						game.addPlayer(username, buttonName, i);
+	        		String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);	
+	        		System.out.println(username + " " + buttonName);
+					if(username != null && !username.equals("")){
+						game.addPlayer(username, Characters.valueOf(buttonName), i);
 						break;
 					}
 	        	/*if( == JOptionPane.CANCEL_OPTION){

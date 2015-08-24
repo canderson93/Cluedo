@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import view.BoardCanvas;
+import model.Characters;
 import model.cards.*;
 import model.tiles.Room;
 import model.tiles.Tile;
@@ -16,7 +17,7 @@ import model.tiles.Tile;
  */
 public class Player {
 	private Image img;
-	private String character;
+	private Characters character;
 	private String username;
 	private char key;
 	private List<Card> hand = new ArrayList<Card>();
@@ -26,7 +27,7 @@ public class Player {
 	private Tile tile; //The tile the player is currently standing on
 	
 	public Player(String name, char key, List<Card> allCards){
-		this.character = name;
+		this.character = Characters.valueOf(name);
 		this.key = key;
 		this.unseenCards = allCards;
 		this.img = BoardCanvas.loadImage("characters/"+name.toLowerCase()+".png");
@@ -52,7 +53,8 @@ public class Player {
 	/*
 	 * Getters
 	 */
-	public String getName(){return this.character; }
+	public String getName(){return this.character.toString(); }
+	public Characters getCharacter(){return this.character; }
 	public char getKey(){ return this.key; }
 	public Tile getTile(){ return this.tile; }
 	public boolean isPlaying(){return this.playing; }
@@ -69,5 +71,11 @@ public class Player {
 	public void setPlaying(boolean b) { this.playing = b; }
 	public void setLastSuggestion(Room r){this.lastSuggestion = r;}
 	public void setUsername(String username) { this.username = username; }
-	public void setCharacter(String character) { this.character = character; }
+	public void setCharacter(Characters character) {
+		this.character = character;
+		
+		//Update the image
+		String imgString = character.toString().toLowerCase();
+		this.img = BoardCanvas.loadImage("characters/"+imgString+".png");
+		}
 }

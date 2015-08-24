@@ -43,10 +43,12 @@ public class GamePanel extends JPanel {
 			public void paintComponent(Graphics g){
 				FontMetrics fm = g.getFontMetrics();
 				Player current = game.getCurrent();
+				
+				String charName = Game.toTitleCase(current.getName());
 								
 				//Calculate center of screen
-				Rectangle2D nameSize = fm.getStringBounds("PLAYER NAME", g);
-				Rectangle2D charSize = fm.getStringBounds(current.getName(), g);
+				Rectangle2D nameSize = fm.getStringBounds(current.getUserName(), g);
+				Rectangle2D charSize = fm.getStringBounds(charName, g);
 				int mid = g.getClipBounds().width/2;
 				int offset = (int)((Math.max(nameSize.getWidth(), charSize.getWidth()) + 32)/2);
 				
@@ -56,11 +58,11 @@ public class GamePanel extends JPanel {
 				//Move offset by img size, and draw name
 				offset -= 32;
 				g.setFont(g.getFont().deriveFont(Font.BOLD));
-				g.drawString("PLAYER NAME", mid-offset, (int)nameSize.getHeight());
+				g.drawString(current.getUserName(), mid-offset, (int)nameSize.getHeight());
 				
 				//Draw the character
 				g.setFont(g.getFont().deriveFont(Font.PLAIN));
-				g.drawString(current.getName(), mid-offset, (int)(charSize.getHeight() + nameSize.getHeight()));
+				g.drawString(charName, mid-offset, (int)(charSize.getHeight() + nameSize.getHeight()));
 			}
 		};
 		nameFrame.setPreferredSize(new Dimension(WIDTH, 40));

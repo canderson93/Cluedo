@@ -250,7 +250,7 @@ public class Game{
 		this.current = nextPlayer();
 	}
 	
-	public void addPlayer(String username, String character, int i){
+	public void addPlayer(String username, Characters character, int i){
 		System.out.println("username : " + username + " character : " + character);
 		this.players.get(i).setUsername(username);
 		this.players.get(i).setCharacter(character);
