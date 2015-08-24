@@ -28,7 +28,7 @@ public class Player {
 	
 	public Player(String name, char key, List<Card> allCards){
 		this.character = Characters.valueOf(name);
-		this.key = key;
+		this.key = key;		
 		this.unseenCards = allCards;
 		this.img = BoardCanvas.loadImage("characters/"+name.toLowerCase()+".png");
 	}

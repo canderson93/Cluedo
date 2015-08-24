@@ -35,6 +35,7 @@ public class Game{
 
 	List<Card> solution = new ArrayList<Card>();
 	List<Player> players = new ArrayList<Player>();
+	List<Card> allCards = new ArrayList<Card>();
 	// Complete list of all cards in the deck
 	List<WeaponCard> weapons = new ArrayList<WeaponCard>();
 	List<CharacterCard> characters = new ArrayList<CharacterCard>();
@@ -47,8 +48,6 @@ public class Game{
 		this.board = Board.parseBoard(filename);
 		loadCards();
 		createPlayers(numPlayers);
-		//change character name to what they want
-		createUsers();
 		this.current = this.players.get(0);
 		dealRemainder();
 		
@@ -69,27 +68,6 @@ public class Game{
 		nextRound();
 	}
 
-	public void createUsers() {
-		
-		 ButtonGroup group = new ButtonGroup();
-		 for(Characters c : Characters.values()){
-			 //Create the radio buttons.
-		        JRadioButton coronel = new JRadioButton("Coronel Mustard");
-		        coronel.setMnemonic(KeyEvent.VK_B);
-		        coronel.setActionCommand("Cornoneeel");
-		        coronel.setSelected(true);
-		        group.add(coronel);
-		        coronel.addActionListener(null);
-		        
-		 }
-	    
-	     //group.add(catButton);
-
-		
-		
-	}
-	
-	
 	/**
 	 * Helper method to convert the string to title case for pretty printing.
 	 * 
@@ -178,15 +156,15 @@ public class Game{
 
 		// create players with random characters chosen from the list of
 		// characters
+		// create a list of all of the cards (including the solution)
+
 		for (int i = 0; i < numPlayers; i++) {
 			String temp = dealingPlayers.remove(
 					new Random().nextInt(dealingPlayers.size())).getValue();
-
-			// create a list of all of the cards (including the solution)
 			List<Card> allCards = new ArrayList<Card>(this.weapons);
 			allCards.addAll(this.rooms);
 			allCards.addAll(this.characters);
-
+			this.allCards = allCards;
 			// loop through the last name until we find an unused token
 			int j = temp.indexOf('_') + 1;
 			while (tokens.containsKey(temp.charAt(j))) {
@@ -442,7 +420,16 @@ public class Game{
 	public List<CharacterCard> getCharacterCards() {return this.characters;}
 	public List<RoomCard> getRoomCards() {return this.rooms;}
 	public List<Card> getSolution() {return solution;}
-
+	public List<Card> getAllCards() { 
+		
+		List<Card> allCards = new ArrayList<Card>(this.weapons);
+		allCards.addAll(this.rooms);
+		allCards.addAll(this.characters);
+		return allCards; 
+		
+	}
+	
+	
 	/*
 	 * Setters
 	 */

@@ -58,7 +58,6 @@ public class MainWindow extends JFrame {
 		});
 				
 		JMenuBar menu = createMenu();
-				
 		this.setJMenuBar(menu);
 	}
 	
@@ -140,11 +139,9 @@ public class MainWindow extends JFrame {
 		createPlayers();
 		game.nextRound();
 		this.canvas = new BoardCanvas(game, this);
-		for(Player p : game.getPlayers()){
-			System.out.println("Player " + p.getUserName() + " character " + p.getName());
-		}
 		JPanel outerPanel = new JPanel(new GridBagLayout());
 		rightPane = new GamePanel(game, this);
+		this.addKeyListener(rightPane);
 										
 		//Set constraints to consume all available space
 		GridBagConstraints c = new GridBagConstraints();
@@ -242,8 +239,7 @@ public class MainWindow extends JFrame {
 	        		}
 	        	}
 	        	while(true){
-	        		String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);	
-	        		System.out.println(username + " " + buttonName);
+	        		String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);		        		
 					if(username != null && !username.equals("")){
 						game.addPlayer(username, Characters.valueOf(buttonName), i);
 						break;

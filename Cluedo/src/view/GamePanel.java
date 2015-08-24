@@ -9,6 +9,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.BoxLayout;
@@ -20,20 +23,21 @@ import controller.Game;
 import controller.Player;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements KeyListener{
 	public static final int WIDTH = 150;
 	private Game game;
-	
+	private MainWindow window;
 	private Image leftDie;
 	private Image rightDie;
 	
 	private JButton suggestBtn;
 	public GamePanel(Game g, MainWindow window){
 		this.game = g;
-		
+		this.window = window;
 		this.setMinimumSize(new Dimension(WIDTH, 0));
 		this.setMaximumSize(new Dimension(WIDTH, Integer.MAX_VALUE));
-		
+		addKeyListener(this);
+		this.requestFocus();
 		this.setLayout(new BorderLayout());
 		
 		/* 
@@ -126,8 +130,16 @@ public class GamePanel extends JPanel {
 		handBtn.setAlignmentX(CENTER_ALIGNMENT);
 		handBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				new CardDialog(window, "Hand", game.getCurrent().getHand());
+			}
+		});
+		
+		//Show Unseen Cards Button
+		JButton journalBtn = new JButton("Journal");
+		journalBtn.setAlignmentX(CENTER_ALIGNMENT);
+		journalBtn.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				new CardDialog(window, "Unseen Cards", game.getAllCards(), game.getCurrent().getUnseenCards());
 			}
 		});
 		
@@ -148,7 +160,8 @@ public class GamePanel extends JPanel {
 		buttonPanel.add(suggestBtn);
 		buttonPanel.add(accuseBtn);
 		buttonPanel.add(handBtn);
-		buttonPanel.add(roundBtn);
+		buttonPanel.add(journalBtn);
+		buttonPanel.add(roundBtn);		
 		
 		//Add the panels to the pane
 		this.add(nameFrame, BorderLayout.NORTH);
@@ -186,5 +199,29 @@ public class GamePanel extends JPanel {
 		
 		leftDie = BoardCanvas.loadImage("dice/die_"+left+".png");
 		rightDie = BoardCanvas.loadImage("dice/die_"+right+".png");
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		System.out.print("hi");
+		if(e.getKeyCode() == (KeyEvent.VK_ESCAPE)){
+			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+		}
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.print("hi");
+		if(e.getKeyCode() == (KeyEvent.VK_ESCAPE)){
+			window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
