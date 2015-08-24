@@ -1,8 +1,5 @@
 package controller;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,13 +8,10 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import model.Board;
-import model.Board.Direction;
 import model.Characters;
 import model.Weapons;
 import model.cards.Card;
@@ -293,7 +287,6 @@ public class Game{
 	public boolean move(Tile tile, JPanel view) {
 		
 		List<Tile> path = board.findPath(current.getTile(), tile);
-		System.out.println("roll : " + this.roll);
 		
 		if (roll <= 0){return false;}
 		if(path.size() == 0){return false;}

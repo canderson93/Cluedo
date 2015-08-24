@@ -113,7 +113,6 @@ public class PathFinder {
 			path.add(0, current.node);
 			current = current.parent;
 		}
-		System.out.println("Path Size: "+path.size());
 		return path;
 	}
 		

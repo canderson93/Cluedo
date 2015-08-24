@@ -96,8 +96,12 @@ public class GamePanel extends JPanel {
 		suggestBtn.setAlignmentX(CENTER_ALIGNMENT);
 		suggestBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				game.suggestion("MISS_SCARLETT", "REVOLVER", (Room)game.getCurrent().getTile());
+				MurderDialog md = new MurderDialog(window, game, (Room)game.getCurrent().getTile());
 				
+				if (md.isFinished()){
+					game.suggestion(md.getCharacter(), md.getWeapon(), (Room)game.getCurrent().getTile());
+					game.nextRound();
+				}
 				window.updateWindow();
 			}
 		});
@@ -107,8 +111,13 @@ public class GamePanel extends JPanel {
 		accuseBtn.setAlignmentX(CENTER_ALIGNMENT);
 		accuseBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				MurderDialog md = new MurderDialog(window, game);
 				
+				if (md.isFinished()){
+					game.accusation(md.getCharacter(), md.getWeapon(), md.getRoom());
+					game.nextRound();
+				}
+				window.updateWindow();
 			}
 		});
 		

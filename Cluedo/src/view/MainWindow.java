@@ -232,6 +232,7 @@ public class MainWindow extends JFrame {
 	        	((JToggleButton.ToggleButtonModel)group.getSelection()).setEnabled(false);
 	        	//((JToggleButton.ToggleButtonModel)group.getSelection()).setSelected(false);
 	        	group.clearSelection();
+	        	
 	        	Enumeration<AbstractButton> en = group.getElements();
 	        	while (en.hasMoreElements()){
 	        		AbstractButton b = en.nextElement();
