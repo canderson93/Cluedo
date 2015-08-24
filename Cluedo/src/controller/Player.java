@@ -1,7 +1,6 @@
 package controller;
 import java.awt.Image;
 import java.awt.Graphics;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import model.tiles.Tile;
 public class Player {
 	private Image img;
 	private String character;
+	private String username;
 	private char key;
 	private List<Card> hand = new ArrayList<Card>();
 	private List<Card> unseenCards; //cards the player hasn't seen, this is updated throughout the game
@@ -60,6 +60,7 @@ public class Player {
 	public List<Card> getHand(){ return this.hand; }
 	public Room getLastSuggestion(){ return this.lastSuggestion; }
 	public Image getImage(){return img;}
+	public String getUserName(){return this.username; }
 	
 	/*
 	 * Setters
@@ -67,4 +68,6 @@ public class Player {
 	public void setTile(Tile t){ this.tile = t; }
 	public void setPlaying(boolean b) { this.playing = b; }
 	public void setLastSuggestion(Room r){this.lastSuggestion = r;}
+	public void setUsername(String username) { this.username = username; }
+	public void setCharacter(String character) { this.character = character; }
 }

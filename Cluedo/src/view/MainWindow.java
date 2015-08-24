@@ -1,16 +1,15 @@
 package view;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -21,14 +20,15 @@ import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 
-import model.Characters;
 import controller.Game;
+import controller.Player;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
+	
 	private BoardCanvas canvas;
 	private GamePanel rightPane;
-	
+	private int players;
 	private Game game;
 	
 	//Window components
@@ -92,7 +92,6 @@ public class MainWindow extends JFrame {
 		
 		file.add(newGame);
 		file.add(close);
-				
 		menu.add(file);
 		return menu;
 	}
@@ -103,8 +102,7 @@ public class MainWindow extends JFrame {
 	 * @param filename
 	 */
 	private void startNewGame(String filename){
-		int players;
-		
+
 		while (true){
 			String result = JOptionPane.showInputDialog(this, "How many players?", "New Game", JOptionPane.QUESTION_MESSAGE);
 			
@@ -136,102 +134,12 @@ public class MainWindow extends JFrame {
 		}
 		
 		this.game = new Game(filename, players);
-		
-		
-		JPanel panel = new JPanel();
-		 ButtonGroup group = new ButtonGroup();
-		// for(Characters c : Characters.values()){
-			 //Create the radio buttons.
-		        JRadioButton colonel = new JRadioButton("Colonel Mustard");
-		        //coronel.setMnemonic(KeyEvent.VK_B);
-		        colonel.setActionCommand("Colonel Mustard");
-		        colonel.setSelected(true);
-		        
-		        JRadioButton white = new JRadioButton("Mrs White");
-		        white.setActionCommand("Mrs White");
-		        white.setSelected(false);
-		        
-		        JRadioButton green = new JRadioButton("Reverend Green");
-		        green.setActionCommand("Reverend Green");
-		        green.setSelected(false);
-		        
-		        group.add(colonel);
-		        group.add(white);
-		        group.add(green);
-		        
-		  /*      coronel.addActionListener(new ActionListener(){
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						
-						if(e.getSource() == coronel){
-							System.out.println("Cornonel pressed");
-
-						}
-						else if(e.getSource() == white){
-							System.out.println("Mrs White pressed");
-
-						}
-		        }
-				});*/
-		        panel.add(colonel);
-		        panel.add(white);
-		        panel.add(green);
-		        
-		        String[] options =  { "Confirm", "Exit" };
-		        for(int i = 0; i < players; i++){
-		        	int playerNum = i + 1;
-			        int choice = JOptionPane.showOptionDialog(null, panel,
-						    "Player " + playerNum + " , please select your character.", JOptionPane.YES_NO_OPTION,
-					    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-			        if(choice == JOptionPane.NO_OPTION){
-			        	 System.exit(0);
-			        }
-			        else if(choice == JOptionPane.YES_OPTION){	 
-			        	//TODO: record the user's choice
-			        	String buttonName = ((JToggleButton.ToggleButtonModel)group.getSelection()).getActionCommand();
-			        	System.out.println(buttonName);
-			        	//set selected button to be uncheckable now
-			        	((JToggleButton.ToggleButtonModel)group.getSelection()).setEnabled(false);
-			        	((JToggleButton.ToggleButtonModel)group.getSelection()).setSelected(false);
-			        	while (true){
-			        	String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);
-			        	
-			        	/*if (username == ""){
-			        		JOptionPane.showMessageDialog(this, "Please try again.", "You must have name", JOptionPane.ERROR_MESSAGE);
-						}*/
-			        	
-							//players = Integer.parseInt(result);
-							
-							if (username != null){
-								break;
-							}
-							
-							JOptionPane.showMessageDialog(this, "You must have a name", "Please try again", JOptionPane.ERROR_MESSAGE);
-					}
-			     }
-		      }
-		// }
-//		 for(int i = 0; i < players; i++){
-//			 
-//			JPanel panel = new JPanel();
-//			for(Characters c : Characters.values()){
-//				JRadioButton character = new JRadioButton(game.toTitleCase(c.toString()));
-//				//character.addActionListener(new EnableListener());
-//				panel.add(character);
-//			}
-//			int playerNum = i + 1;
-//			JOptionPane.showOptionDialog(null, panel,
-//			    "Player " + playerNum + ", please select your character.", JOptionPane.YES_NO_OPTION,
-//			    JOptionPane.QUESTION_MESSAGE, null, null, null);
-//			
-//			String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);
-		//}
-		
-		
+		createPlayers();
 		game.nextRound();
 		this.canvas = new BoardCanvas(game, this);
-		
+		for(Player p : game.getPlayers()){
+			System.out.println("Player " + p.getUserName() + " character " + p.getName());
+		}
 		JPanel outerPanel = new JPanel(new GridBagLayout());
 		rightPane = new GamePanel(game, this);
 										
@@ -259,6 +167,91 @@ public class MainWindow extends JFrame {
 		updateWindow();
 	}
 	
+	private void createPlayers() {
+		
+		JPanel panel = new JPanel();
+		ButtonGroup group = new ButtonGroup();
+        JRadioButton colonel = new JRadioButton("Colonel Mustard");
+        colonel.setActionCommand("Colonel Mustard");
+        colonel.setSelected(true);
+        JRadioButton white = new JRadioButton("Mrs White");
+        white.setActionCommand("Mrs White");
+        white.setSelected(false);
+        JRadioButton green = new JRadioButton("Reverend Green");
+        green.setActionCommand("Reverend Green");
+        green.setSelected(false);
+        JRadioButton scarlett = new JRadioButton("Miss Scarlett");
+        white.setActionCommand("Miss Scarlett");
+        white.setSelected(false);
+        JRadioButton peacock = new JRadioButton("Mrs Peacock");
+        white.setActionCommand("Mrs Peacock");
+        white.setSelected(false);
+        JRadioButton plum = new JRadioButton("Professor Plum");
+        white.setActionCommand("Professor Plum");
+        white.setSelected(false);
+        //group the radio buttons
+        group.add(colonel);
+        group.add(white);
+        group.add(green);
+        group.add(peacock);
+        group.add(plum);
+        group.add(scarlett);
+		/*colonel.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				if(e.getSource() == colonel){
+					System.out.println("Cornononel pressed");
+					group.setSelected((ButtonModel) colonel, false);
+				}
+        }
+		});*/	
+        panel.add(colonel);
+        panel.add(white);
+        panel.add(green);
+        panel.add(white);
+        panel.add(scarlett);
+        panel.add(peacock);
+        
+        String[] options =  { "Confirm", "Exit" };
+        for(int i = 0; i < players; i++){
+        	int playerNum = i + 1;
+	        int choice = JOptionPane.showOptionDialog(null, panel,
+				    "Player " + playerNum + " , please select your character.", JOptionPane.YES_NO_OPTION,
+			    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+	        if(choice == JOptionPane.NO_OPTION){
+	        	 System.exit(0);
+	        }
+	        else if(choice == JOptionPane.YES_OPTION){	 
+	        	String buttonName = ((JToggleButton.ToggleButtonModel)group.getSelection()).getActionCommand();
+	        	//set selected button to be uncheckable now
+	        	((JToggleButton.ToggleButtonModel)group.getSelection()).setEnabled(false);
+	        	((JToggleButton.ToggleButtonModel)group.getSelection()).setSelected(false);
+	        	while(true){
+	        		String username = JOptionPane.showInputDialog(this, "Please reveal yourself", "Your Username", JOptionPane.QUESTION_MESSAGE);							
+					if(username != null){
+						game.addPlayer(username, buttonName, i);
+						break;
+					}
+	        	/*if( == JOptionPane.CANCEL_OPTION){
+	        		
+	        	}*/
+					JOptionPane.showMessageDialog(this, "You must have a name", "Please try again", JOptionPane.ERROR_MESSAGE);
+	        	}
+	        }
+        }
+	
+//		 for(int i = 0; i < players; i++){
+//			 
+//			JPanel panel = new JPanel();
+//			for(Characters c : Characters.values()){
+//				JRadioButton character = new JRadioButton(game.toTitleCase(c.toString()));
+//				//character.addActionListener(new EnableListener());
+//				panel.add(character);
+//			}	
+	}
+
 	/**
 	 * Performs the conditional checks for window elements, and updates
 	 * them

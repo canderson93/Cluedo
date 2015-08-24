@@ -33,7 +33,7 @@ import model.tiles.Tile;
  * @author Chloe
  * 
  */
-public class Game extends JDialog implements ActionListener{
+public class Game{
 
 	private Board board;
 	private boolean gameComplete = false;
@@ -226,8 +226,14 @@ public class Game extends JDialog implements ActionListener{
 	 */
 	public void nextRound() {
 
-		this.roll = new Random().nextInt(10) + 2;
+		this.roll = new Random().nextInt(11) + 2;
 		this.current = nextPlayer();
+	}
+	
+	public void addPlayer(String username, String character, int i){
+		System.out.println("username : " + username + " character : " + character);
+		this.players.get(i).setUsername(username);
+		this.players.get(i).setCharacter(character);
 	}
 
 	/**
@@ -421,10 +427,5 @@ public class Game extends JDialog implements ActionListener{
 	public void setRoll(int i) { this.roll = i; }
 	public void setSolution(List<Card> cards) {this.solution = cards;}
 	public void setCurrent(Player p) {this.current = p;}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
