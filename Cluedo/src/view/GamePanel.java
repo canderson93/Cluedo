@@ -43,19 +43,24 @@ public class GamePanel extends JPanel {
 			public void paintComponent(Graphics g){
 				FontMetrics fm = g.getFontMetrics();
 				Player current = game.getCurrent();
-				
-				g.drawImage(current.getImage(), 0, 0, 32, 32, null);
-				
-				//Draw the name
+								
+				//Calculate center of screen
 				Rectangle2D nameSize = fm.getStringBounds("PLAYER NAME", g);
 				Rectangle2D charSize = fm.getStringBounds(current.getName(), g);
+				int mid = g.getClipBounds().width/2;
+				int offset = (int)((Math.max(nameSize.getWidth(), charSize.getWidth()) + 32)/2);
 				
+				//Draw icon
+				g.drawImage(current.getImage(), mid-offset, 0, 32, 32, null);
+				
+				//Move offset by img size, and draw name
+				offset -= 32;
 				g.setFont(g.getFont().deriveFont(Font.BOLD));
-				g.drawString("PLAYER NAME", 35, (int)nameSize.getHeight());
+				g.drawString("PLAYER NAME", mid-offset, (int)nameSize.getHeight());
 				
 				//Draw the character
 				g.setFont(g.getFont().deriveFont(Font.PLAIN));
-				g.drawString(current.getName(), 35, (int)(charSize.getHeight() + nameSize.getHeight()));
+				g.drawString(current.getName(), mid-offset, (int)(charSize.getHeight() + nameSize.getHeight()));
 			}
 		};
 		nameFrame.setPreferredSize(new Dimension(WIDTH, 40));
@@ -65,9 +70,16 @@ public class GamePanel extends JPanel {
 		 */
 		JPanel infoPanel = new JPanel(){
 			public void paintComponent(Graphics g){
+				int width = g.getClipBounds().width;
 				//Draw the two dice
-				g.drawImage(leftDie, 0, 0, 50, 50, null);
-				g.drawImage(rightDie, 0, 52, 50, 50, null);
+				g.drawImage(leftDie, width/2-51, 0, 50, 50, null);
+				g.drawImage(rightDie, width/2+1, 0, 50, 50, null);
+				
+				String rollString = "Remaining: "+game.getRoll();
+				FontMetrics fm = g.getFontMetrics();
+				Rectangle2D strSize = fm.getStringBounds(rollString, g);
+				
+				g.drawString(rollString, (int)((g.getClipBounds().width/2)-(strSize.getWidth()/2)), (int)(50+strSize.getHeight()));
 			}
 		};
 		
@@ -82,8 +94,9 @@ public class GamePanel extends JPanel {
 		suggestBtn.setAlignmentX(CENTER_ALIGNMENT);
 		suggestBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				game.suggestion("MISS_SCARLETT", "REVOLVER", (Room)game.getCurrent().getTile());
 				
+				window.updateWindow();
 			}
 		});
 		
@@ -138,23 +151,29 @@ public class GamePanel extends JPanel {
 	 * Perform the conditional checks on this window
 	 */
 	public void updateWindow(){
-		suggestBtn.setEnabled(game.getCurrent().getTile() instanceof Room);
+		Player p = game.getCurrent();
+		if (p.getTile() instanceof Room){
+			suggestBtn.setEnabled(p.getTile() != p.getLastSuggestion());
+		} else {
+			suggestBtn.setEnabled(false);
+		}
+		
 	}
 	
 	public void updateDice(){
 		int roll = game.getRoll();
 		//ranges for a single die
-		int min = roll-6;
+		int min = roll-6 > 0 ? roll-6 : 1;
 		int max = roll-1 < 6 ? roll-1 : 6;
 		
-		int left = (int)(min + Math.random() * (max-min)+1);
+		int left = (int)(min + Math.random() * (max-min));
 		int right = roll-left;
 		
 		//Debugging stuff
-		if (left > 6){System.out.println("Whoops. Left was "+left);}
-		if (right > 6){System.out.println("Whoops. Right was "+right);}
+		if (left > 6 || left < 1){System.out.println("Whoops. Left was "+left);}
+		if (right > 6 || right < 1){System.out.println("Whoops. Right was "+right);}
 		
-		leftDie = BoardCanvas.loadImage("dice/die_"+left);
-		rightDie = BoardCanvas.loadImage("dice/die_"+right);
+		leftDie = BoardCanvas.loadImage("dice/die_"+left+".png");
+		rightDie = BoardCanvas.loadImage("dice/die_"+right+".png");
 	}
 }

@@ -86,6 +86,14 @@ public class Room extends Tile {
 	}
 	
 	/**
+	 * Returns whether the room contains any weapons
+	 * @return
+	 */
+	public boolean containsWeapon(){
+		return weapons.size() > 0;
+	}
+	
+	/**
 	 * Adds a coordinate as a room location
 	 * @param x
 	 * @param y
@@ -166,4 +174,5 @@ public class Room extends Tile {
 	public int getWidth(){return maxX-minX+1;}
 	public int getHeight(){return maxY-minY+1;}
 	public Set<Player> getPlayers(){return players;}
+	public Set<Weapons> getWeapons(){return weapons;}
 }

@@ -57,6 +57,21 @@ public class Game{
 		createUsers();
 		this.current = this.players.get(0);
 		dealRemainder();
+		
+		List<Room> rooms = board.getRooms();
+		for (Weapons w : Weapons.values()){
+			while (true){
+				int index = new Random().nextInt(rooms.size());
+
+				Room r = rooms.get(index);
+				if (r.getKey() == '#'){continue; }
+				if (!r.containsWeapon()){
+					System.out.println("Added "+w.toString()+" to "+r.getName());
+					r.addWeapon(w);
+					break;
+				}
+			}
+		}
 		nextRound();
 	}
 
@@ -226,7 +241,12 @@ public class Game{
 	 */
 	public void nextRound() {
 
-		this.roll = new Random().nextInt(11) + 2;
+		//By doing it this way, we get a distribution more like
+		//real dice, with a roll of 7 being the most likely
+		int left = new Random().nextInt(6)+1;
+		int right = new Random().nextInt(6)+1;
+		
+		this.roll = left + right;
 		this.current = nextPlayer();
 	}
 	
@@ -273,10 +293,11 @@ public class Game{
 	public boolean move(Tile tile, JPanel view) {
 		
 		List<Tile> path = board.findPath(current.getTile(), tile);
-		//TODO: Definitely uncomment this in real life
 		System.out.println("roll : " + this.roll);
-		if(this.roll < path.size()){ return false; } //not a high enough roll for user's choice
-		this.roll -= path.size();
+		
+		if (roll <= 0){return false;}
+		if(path.size() == 0){return false;}
+	
 		for(int i = 0; i < path.size(); i++){
 			if(i < path.size() - 1){ 
 				//don't allow to move once in a room
@@ -284,13 +305,20 @@ public class Game{
 				else{ board.move(this.current, path.get(i), false); } 
 			}
 			else { board.move(this.current, path.get(i), true); } //warn move method that this is the destination tile
+			this.roll--;
 			
 			view.paintImmediately(view.getBounds());
 			try{
-				Thread.sleep(50);
+				Thread.sleep(150);
 			} catch (InterruptedException e){
 				e.printStackTrace();
 			}
+			
+			if (this.roll == 0){break;}
+		}
+		
+		if (this.current.getTile() instanceof Room){
+			this.roll = 0;
 		}
 		
 		return true;
@@ -356,6 +384,7 @@ public class Game{
 		// Move the weapon to the room
 		r.addWeapon(suggestedWeapon);
 		for (Room rooms : board.getRooms()) {
+			if (rooms == r){continue; }
 			if (rooms.containsWeapon(suggestedWeapon)) {
 				rooms.removeWeapon(suggestedWeapon);
 				break;
@@ -367,8 +396,8 @@ public class Game{
 		for (Player p : players) {
 			if (p.getName().equals(c)) {
 				Tile t = p.getTile();
-				r.setPlayer(p);
 				t.removePlayer(p);
+				r.setPlayer(p);
 				break;
 			}
 		}
