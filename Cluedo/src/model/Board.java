@@ -14,6 +14,8 @@ import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -263,9 +265,11 @@ TODO:
 	public static Board parseBoard(String filename) {
 		Scanner sc;
 
+		InputStream input = Board.class.getClassLoader().getResourceAsStream(filename);
+		
 		try {
-			sc = new Scanner(new File(filename));
-		} catch (FileNotFoundException e1) {
+			sc = new Scanner(input);
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			throw new RuntimeException("Could not parse: File not found");
 		}
